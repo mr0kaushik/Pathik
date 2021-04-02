@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    <color name="purple_200">#FFBB86FC</color>-->
+    <!--    <color name="purple_500">#FF6200EE</color>-->
+    <!--    <color name="purple_700">#FF3700B3</color>-->
+    <!--    <color name="teal_200">#FF03DAC5</color>-->
+    <!--    <color name="teal_700">#FF018786</color>-->
+    <!--    <color name="black">#FF000000</color>-->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+
+    <color name="white_smoke">#fafafa</color>
+    <color name="white_old_lace">#fdf5e6</color>
+
+
+    <color name="colorBackground">#FF191720</color>
+    <color name="colorError">#FFF53844</color>
+
+    <color name="bunker">#141F23</color>
+    <color name="bunker_light">#3A464B</color>
+    <color name="bunker_dark">#000000</color>
+
+    <color name="gray_98">#FF37474F</color>
+    <color name="gray_78">#FFC7C7C7</color>
+    <color name="gray_400">#FFBDBDBD</color>
+
+    <color name="gray_200">#3B3941</color>
+    <color name="light_blue_400">#FF29B6F6</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="gray_600">#FF757575</color>
+
+    <!--    <color name="primaryTextColor">#ffffff</color>-->
+    <!--    <color name="secondaryTextColor">#ffffff</color>-->
+
+
+</resources>

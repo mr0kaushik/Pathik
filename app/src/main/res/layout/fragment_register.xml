@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.auth.RegisterFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        style="@style/Style.Pathik.Primary.Button.Icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        app:icon="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="@id/verticalStart"
+        app:layout_constraintTop_toTopOf="@id/horizontalStart" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/registerTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="start"
+        android:text="@string/let_s_sign_you_up"
+        android:textAppearance="@style/TextAppearance.Pathik.Headline4"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+        app:layout_constraintStart_toStartOf="@id/verticalStart"
+        app:layout_constraintTop_toBottomOf="@id/btnBack" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilName"
+        style="@style/Style.Pathik.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+        app:layout_constraintStart_toEndOf="@id/verticalStart"
+        app:layout_constraintTop_toBottomOf="@id/registerTitle"
+        app:startIconDrawable="@drawable/ic_user">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etName"
+            style="@style/Style.Pathik.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/name"
+            android:inputType="textPersonName"
+            android:textColorHint="@color/gray_400" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilPhoneNumber"
+        style="@style/Style.Pathik.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+        app:layout_constraintStart_toEndOf="@id/verticalStart"
+        app:layout_constraintTop_toBottomOf="@id/tilName"
+        app:startIconDrawable="@drawable/ic_phone_call">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPhone"
+            style="@style/Style.Pathik.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:digits="0123456789"
+            android:hint="@string/phone_number"
+            android:inputType="phone"
+            android:maxLength="10"
+            tools:text="7557551234" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEmail"
+        style="@style/Style.Pathik.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+        app:layout_constraintStart_toEndOf="@id/verticalStart"
+        app:layout_constraintTop_toBottomOf="@id/tilPhoneNumber"
+        app:startIconDrawable="@drawable/ic_email">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEmail"
+            style="@style/Style.Pathik.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            tools:text="info@mr0kaushik.com" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilPassword"
+        style="@style/Style.Pathik.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+        app:layout_constraintStart_toEndOf="@id/verticalStart"
+        app:layout_constraintTop_toBottomOf="@id/tilEmail"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/white"
+        app:startIconDrawable="@drawable/ic_password">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
+            style="@style/Style.Pathik.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:maxLength="30"
+            tools:text="12345678" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilConfirmPassword"
+        style="@style/Style.Pathik.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+        app:layout_constraintStart_toEndOf="@id/verticalStart"
+        app:layout_constraintTop_toBottomOf="@id/tilPassword"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/white"
+        app:startIconDrawable="@drawable/ic_password_confirm">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etConfirmPassword"
+            style="@style/Style.Pathik.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:maxLength="30"
+            tools:text="12345678" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:text="@string/already_a_member"
+        android:textAppearance="@style/TextAppearance.Pathik.Body1"
+        android:textColor="@color/gray_400"
+        app:layout_constraintBottom_toTopOf="@id/btnRegister"
+        app:layout_constraintEnd_toStartOf="@id/btnSignIn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/verticalStart"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/btnSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="12dp"
+        android:text="@string/sign_in"
+        android:textAppearance="@style/TextAppearance.Pathik.Subtitle1"
+        android:textColor="@color/white_old_lace"
+        app:layout_constraintBottom_toTopOf="@id/btnRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/tvAccount" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRegister"
+        style="@style/Style.Pathik.Primary.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/register"
+        app:layout_constraintBottom_toTopOf="@id/horizontalEnd"
+        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+        app:layout_constraintStart_toEndOf="@id/verticalStart" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ShapeAppearance.Pathik.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Pathik.Primary.Button" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearance">@style/ShapeAppearance.Pathik.SmallComponent.Rounded</item>
+    </style>
+
+    <style name="ShapeAppearance.Pathik.Secondary.Button" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearance">@style/ShapeAppearance.Pathik.SmallComponent.Rounded.Right</item>
+    </style>
+
+    <style name="Widget.Pathik.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="shapeAppearance">@style/ShapeAppearance.Pathik.SmallComponent.Rounded</item>
+    </style>
+
+    <style name="ShapeAppearance.Pathik.SmallComponent.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">14dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Pathik.Rounded.CardView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="ShapeAppearance.Pathik.SmallComponent.Rounded.Right" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">14dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">14dp</item>
+    </style>
+
+
+    <style name="ShapeAppearance.Pathik.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+
+    <style name="ShapeAppearance.Pathik.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">0dp</item>
+    </style>
+</resources>

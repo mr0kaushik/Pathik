@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /*
+  ~  * Created by Deepak Kaushik
+  ~  * Copyright (c) 2019. All right reserved.
+  ~  * Last Modified 4/7/19 10:27 PM
+  ~  */
+  -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false">
+    <translate
+        android:duration="250"
+        android:fromXDelta="0%"
+        android:fromYDelta="0%"
+        android:toXDelta="-100%"
+        android:toYDelta="0%" />
+</set>

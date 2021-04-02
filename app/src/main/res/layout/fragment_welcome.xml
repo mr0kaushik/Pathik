@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".ui.auth.WelcomeFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuide1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.47" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuide1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuide2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.51" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivWelcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/welcome_vc"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalGuide1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/welcome_title"
+        android:textAppearance="@style/TextAppearance.Pathik.Headline5"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuide1" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:padding="4dp"
+        android:gravity="center"
+        android:text="@string/welcome_subtitle"
+        android:textAppearance="@style/TextAppearance.Pathik.Body1"
+        android:textColor="@color/gray_400"
+        app:layout_constraintEnd_toEndOf="@+id/tvLogo"
+        app:layout_constraintStart_toStartOf="@+id/tvLogo"
+        app:layout_constraintTop_toBottomOf="@id/tvLogo"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSignIn"
+        style="@style/Style.Pathik.Secondary.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/sign_in"
+        app:shapeAppearance="@style/ShapeAppearance.Pathik.SmallComponent.Rounded.Right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/verticalGuide1" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRegister"
+        style="@style/Style.Pathik.Primary.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/register"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/verticalGuide2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:rippleColor="@color/gray_98" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

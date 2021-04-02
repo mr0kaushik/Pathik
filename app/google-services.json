@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "978987993811",
+    "project_id": "pathik-app",
+    "storage_bucket": "pathik-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978987993811:android:c6430e341c00dabf87e226",
+        "android_client_info": {
+          "package_name": "com.pathik.ride"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "978987993811-hil3u9d77sdtjmmujqi1qhka67brrb2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeCFDD5soQsL_1FIMiflc7SRdGg3llPXA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "978987993811-hil3u9d77sdtjmmujqi1qhka67brrb2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

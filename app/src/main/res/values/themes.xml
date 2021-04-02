@@ -1,0 +1,58 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+
+    <style name="Theme.Pathik" parent="Base.Theme.Pathik"/>
+
+    <style name="Base.Theme.Pathik" parent="Base.Theme.MaterialThemeBuilder">
+        <item name="colorPrimary">@color/bunker</item>
+        <item name="colorPrimaryVariant">@color/bunker_light</item>
+        <item name="colorSecondary">@color/gray_98</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+
+        <item name="android:colorBackground">@color/colorBackground</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/white_old_lace</item>
+        <!-- Customize your theme here. -->
+
+
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorOnSurface">@color/gray_400</item>
+        <item name="colorOnPrimarySurface">@color/white</item>
+
+
+        <!--Material type attributes-->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.Pathik.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.Pathik.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.Pathik.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.Pathik.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.Pathik.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.Pathik.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Pathik.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.Pathik.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.Pathik.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.Pathik.Body2</item>
+        <item name="textAppearanceButton">@style/TextAppearance.Pathik.Button</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Pathik.Caption</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.Pathik.Overline</item>
+        <!--Material shape attributes-->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Pathik.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Pathik.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Pathik.LargeComponent</item>
+        <!--Component styles-->
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
+
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
+    </style>
+    <style name="Base.Theme.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">?android:attr/colorBackground</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarDividerColor" tools:ignore="NewApi">?attr/colorControlHighlight</item>
+    </style>
+
+</resources>
