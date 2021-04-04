@@ -20,9 +20,14 @@
 
 
         <item name="colorOnBackground">@color/white</item>
-        <item name="colorOnSurface">@color/gray_400</item>
+        <item name="colorSurface">@color/white_old_lace</item>
+        <item name="colorOnSurface">@color/gray_98</item>
         <item name="colorOnPrimarySurface">@color/white</item>
 
+        <item name="colorBackgroundFloating">
+            @color/black_ebony</item>
+        <item name="android:colorBackgroundFloating" tools:targetApi="23">
+            @color/black_ebony</item>
 
         <!--Material type attributes-->
         <item name="textAppearanceHeadline1">@style/TextAppearance.Pathik.Headline1</item>

@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.LoginFragment">
+    tools:context=".ui.login.LoginFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontalStart"
@@ -87,7 +87,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+        app:layout_constraintEnd_toEndOf="@id/verticalEnd"
         app:layout_constraintStart_toEndOf="@id/verticalStart"
         app:layout_constraintTop_toBottomOf="@id/tvLoginSubtitle"
         app:startIconDrawable="@drawable/ic_email">
@@ -96,7 +96,7 @@
             android:id="@+id/etLoginEmail"
             style="@style/Style.Pathik.EditText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             tools:text="info@mr0kaushik.com" />
@@ -120,7 +120,7 @@
             android:id="@+id/etLoginPassword"
             style="@style/Style.Pathik.EditText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="textPassword"
             android:maxLength="30"
@@ -178,6 +178,7 @@
         style="@style/Style.Pathik.Primary.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:text="@string/sign_in"
         app:layout_constraintBottom_toTopOf="@id/horizontalBottom"
         app:layout_constraintEnd_toStartOf="@id/verticalEnd"

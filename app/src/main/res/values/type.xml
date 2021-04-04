@@ -32,9 +32,9 @@
     </style>
 
     <style name="TextAppearance.Pathik.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="fontFamily">@font/poppins</item>
-        <item name="android:fontFamily">@font/poppins</item>
-        <item name="android:textSize">19sp</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="TextAppearance.Pathik.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">

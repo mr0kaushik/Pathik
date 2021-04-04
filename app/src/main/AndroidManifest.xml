@@ -3,6 +3,8 @@
     package="com.pathik.ride">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -16,6 +18,7 @@
 
         <activity
             android:name=".ui.auth.AuthActivity"
+            android:screenOrientation="sensorPortrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
