@@ -1,17 +1,13 @@
-package com.pathik.ride.ui
+package com.pathik.ride.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.NavHostFragment
-import com.pathik.ride.R
 import com.pathik.ride.databinding.ActivitySplashBinding
-import com.pathik.ride.ui.auth.AuthActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 

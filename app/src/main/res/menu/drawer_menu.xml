@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/profile"
+        android:title="@string/profile" />
+
+    <item
+        android:id="@+id/payment"
+        android:title="@string/payment" />
+
+    <item
+        android:id="@+id/setting"
+        android:title="@string/setting" />
+
+    <item
+        android:id="@+id/my_trip"
+        android:title="@string/my_trip" />
+
+    <item
+        android:id="@+id/about"
+        android:title="@string/about" />
+
+</menu>

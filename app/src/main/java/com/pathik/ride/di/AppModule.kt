@@ -57,18 +57,10 @@ object AppModule {
     @Singleton
     @Provides
     fun getDataSource(
-        firebaseAuthSource: FirebaseAuthSource,
         fireStore: FirebaseFirestore,
         storageReference: StorageReference,
     ): FirebaseDataSource {
-        return FirebaseDataSource(firebaseAuthSource, fireStore,storageReference)
+        return FirebaseDataSource(fireStore,storageReference)
     }
-
-    @Singleton
-    @Provides
-    fun providePicassoInstance(
-        @ApplicationContext context: Context, url: String
-    ): RequestCreator = Picasso.get().load(url).placeholder(R.drawable.ic_user_place_holder)
-        .error(R.drawable.ic_user_place_holder)
 
 }

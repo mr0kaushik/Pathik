@@ -9,6 +9,8 @@ object UserPref {
 
     const val KEY_USER_ID = "user_id"
     const val KEY_NAME = "user_name"
+    const val KEY_EMAIL = "user_email"
+    const val KEY_USER_PROFILE_URL = "user_profile_url"
 
     private val pref = PathikApp.context()
         .getSharedPreferences("pathik_pref", Context.MODE_PRIVATE)
@@ -20,5 +22,6 @@ object UserPref {
     fun getString(key: String): String {
         return pref.getString(key, "") ?: ""
     }
+
 
 }

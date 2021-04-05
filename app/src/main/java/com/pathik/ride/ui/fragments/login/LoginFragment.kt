@@ -1,4 +1,4 @@
-package com.pathik.ride.ui.login
+package com.pathik.ride.ui.fragments.login
 
 import android.os.Bundle
 import android.text.Editable
@@ -13,11 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseNetworkException
-import com.google.firebase.auth.FirebaseAuthException
 import com.pathik.ride.R
 import com.pathik.ride.databinding.FragmentLoginBinding
 import com.pathik.ride.network.Resource
+import com.pathik.ride.utils.UserPref
 import com.pathik.ride.utils.Util
 import com.pathik.ride.utils.getProgressDialog
 import com.pathik.ride.utils.snackbar
@@ -60,16 +59,18 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         binding.btnSignIn.setOnClickListener {
             if (validateForm()) {
-                loginViewModel.login(
-                    binding.etLoginEmail.text.toString(),
-                    binding.etLoginPassword.text.toString()
-                )
+                login()
             }
-
         }
 
 
-        loginViewModel.currentUser.observe(
+    }
+
+    private fun login() {
+        loginViewModel.login(
+            binding.etLoginEmail.text.toString(),
+            binding.etLoginPassword.text.toString()
+        ).observe(
             viewLifecycleOwner, Observer {
                 when (it) {
                     is Resource.Loading -> {
@@ -80,10 +81,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     is Resource.Success -> {
                         progressDialog?.hide()
                         lifecycleScope.launch {
-                            Timber.i("User Logged In");
-                            binding.root.snackbar("Welcome back")
-
-//                binding.root.snackbar("Set login call !!")
+                            UserPref.putString(UserPref.KEY_NAME, it.value.name!!)
+                            UserPref.putString(UserPref.KEY_EMAIL, it.value.email!!)
+                            binding.root.snackbar(getString(R.string.welcome_back, it.value.name))
                             navController.navigate(LoginFragmentDirections.actionLoginFragmentToMainActivity())
                         }
                     }
@@ -92,12 +92,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         Timber.e(it.exception)
                         if (it.exception is FirebaseException) {
                             binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
+                        } else {
+                            binding.root.snackbar(getString(R.string.an_error_occur))
                         }
                     }
                 }
             }
         )
     }
+
 
     private val loginTextWatcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

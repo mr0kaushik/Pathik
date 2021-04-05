@@ -51,7 +51,6 @@ object Util {
         context: Context, title: String, message: String
     ): MaterialAlertDialogBuilder {
         val builder = MaterialAlertDialogBuilder(context, R.style.MAlertDialogStyle)
-//        builder.background = ContextCompat.getDrawable(context, R.drawable.rounded_bg_white)
         builder.setTitle(title)
             .setMessage(message)
         return builder

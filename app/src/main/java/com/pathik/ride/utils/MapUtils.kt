@@ -2,7 +2,7 @@ package com.mindorks.ridesharing.utils
 
 import android.content.Context
 import android.graphics.*
-import android.util.Log
+import android.location.LocationManager
 import com.google.android.gms.maps.model.LatLng
 import com.pathik.ride.R
 import timber.log.Timber
@@ -11,7 +11,6 @@ import kotlin.math.atan
 
 
 object MapUtils {
-
 
     fun getCarBitmap(context: Context): Bitmap {
         val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_marker)
@@ -52,5 +51,23 @@ object MapUtils {
         }
         Timber.i("Get marker rotation $rotation")
         return rotation
+    }
+
+    fun isLocationEnabled(context: Context): Boolean {
+        val locationManager: LocationManager =
+            context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    fun showGPSNotEnabledDialog(context: Context) {
+//        AlertDialog.Builder(context)
+//            .setTitle(context.getString(R.string.enable_gps))
+//            .setMessage(context.getString(R.string.required_for_this_app))
+//            .setCancelable(false)
+//            .setPositiveButton(context.getString(R.string.enable_now)) { _, _ ->
+//                context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+//            }
+//            .show()
     }
 }

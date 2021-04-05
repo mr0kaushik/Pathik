@@ -14,7 +14,8 @@
         <item name="iconTint">@color/white</item>
         <item name="iconGravity">textStart</item>
         <item name="android:gravity">center</item>
-<!--        <item name="rippleColor"></item>-->
+        <item name="background">?attr/selectableItemBackgroundBorderless</item>
+        <!--        <item name="rippleColor"></item>-->
     </style>
 
     <style name="Style.Pathik.Primary.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -42,14 +43,7 @@
         <item name="android:fontFamily">@font/poppins</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Pathik.MediumComponent.Dialog</item>
         <item name="android:background">@color/black_ebony</item>
-        <!--        <item name="titleTextStyle">@style/PrimaryAppCompatTextView</item>-->
-        <!--        <item name="subtitleTextStyle">@style/SecondaryAppCompatTextView</item>-->
-        <!--        <item name="subtitleTextColor">@color/subtitleTextColor</item>-->
-        <!--        <item name="android:textColorPrimary">@color/colorPrimary</item>-->
-        <!--        <item name="android:buttonBarPositiveButtonStyle" tools:targetApi="lollipop">-->
-        <!--            @style/PositiveButtonStyle-->
-        <!--        </item>-->
-        <!--        <item name="android:textColorSecondary">@color/subtitleTextColor</item>-->
+        <item name="android:colorAccent">@color/white_old_lace</item>
     </style>
 
     <style name="Style.Pathik.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -66,6 +60,17 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorHint">@color/gray_400</item>
         <item name="android:paddingEnd">4dp</item>
+    </style>
+
+
+    <style name="StyleDrawerMenuItem" parent="">
+        <item name="itemTextAppearance">@style/TextAppearance.Pathik.Subtitle1</item>
+        <item name="android:textSize">16sp</item>
+        <item name="itemMaxLines">1</item>
+        <item name="android:letterSpacing">1.3</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="itemTextColor">@color/drawer_menu_item_state</item>
     </style>
 
 

@@ -1,4 +1,4 @@
-package com.pathik.ride.ui.register
+package com.pathik.ride.ui.fragments.register
 
 import android.os.Bundle
 import android.text.Editable
@@ -18,6 +18,7 @@ import com.pathik.ride.R
 import com.pathik.ride.databinding.FragmentRegisterBinding
 import com.pathik.ride.model.User
 import com.pathik.ride.network.Resource
+import com.pathik.ride.utils.UserPref
 import com.pathik.ride.utils.Util
 import com.pathik.ride.utils.getProgressDialog
 import com.pathik.ride.utils.snackbar
@@ -60,20 +61,24 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         binding.btnRegister.setOnClickListener {
             val user = validateAllFields()
             if (user != null) {
-                viewModel.register(user, binding.etPassword.text.toString())
+               register(user)
             }
         }
+    }
 
-        viewModel.registered.observe(viewLifecycleOwner, Observer {
+    private fun register(user: User) {
+        viewModel.register(user, binding.etPassword.text.toString()).observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Loading -> {
                     Timber.i("Show Dialog")
-                    progressDialog = requireContext().getProgressDialog(R.string.logging_in).show()
+                    progressDialog = requireContext().getProgressDialog(R.string.signing_up).show()
                 }
                 is Resource.Success -> {
                     progressDialog?.hide()
                     lifecycleScope.launch {
                         Timber.i("User Logged In")
+                        UserPref.putString(UserPref.KEY_NAME, it.value.name!!)
+                        UserPref.putString(UserPref.KEY_EMAIL, it.value.email!!)
                         binding.root.snackbar("Successfully Registered !!")
                         navController.navigate(RegisterFragmentDirections.actionRegisterFragmentToMainActivity())
                     }

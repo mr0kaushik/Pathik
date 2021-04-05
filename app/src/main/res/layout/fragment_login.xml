@@ -1,189 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginFragment">
+    android:fillViewport="true"
+    tools:context=".ui.fragments.login.LoginFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontalStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="16dp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontalBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="16dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/verticalEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/verticalStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
-
-    <!--    <androidx.appcompat.widget.AppCompatImageView-->
-    <!--        android:id="@+id/btnBack"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:src="@drawable/ic_back"-->
-    <!--        android:tint="@color/white"-->
-    <!--        app:layout_constraintStart_toStartOf="@id/verticalStart"-->
-    <!--        app:layout_constraintTop_toTopOf="@id/horizontalStart" />-->
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnBack"
-        style="@style/Style.Pathik.Primary.Button.Icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        app:icon="@drawable/ic_back"
-        app:layout_constraintStart_toStartOf="@id/verticalStart"
-        app:layout_constraintTop_toTopOf="@id/horizontalStart" />
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvLoginTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:gravity="start"
-        android:text="@string/let_s_sign_you_in"
-        android:textAppearance="@style/TextAppearance.Pathik.Headline4"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
-        app:layout_constraintStart_toStartOf="@id/verticalStart"
-        app:layout_constraintTop_toBottomOf="@id/btnBack" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvLoginSubtitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:gravity="start"
-        android:text="@string/welcome_back_nyou_ve_been_missed"
-        android:textAppearance="@style/TextAppearance.Pathik.Headline5"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/verticalStart"
-        app:layout_constraintTop_toBottomOf="@id/tvLoginTitle" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilEmail"
-        style="@style/Style.Pathik.TextInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        app:layout_constraintEnd_toEndOf="@id/verticalEnd"
-        app:layout_constraintStart_toEndOf="@id/verticalStart"
-        app:layout_constraintTop_toBottomOf="@id/tvLoginSubtitle"
-        app:startIconDrawable="@drawable/ic_email">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etLoginEmail"
-            style="@style/Style.Pathik.EditText"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalStart"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            tools:text="info@mr0kaushik.com" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="16dp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPassword"
-        style="@style/Style.Pathik.TextInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
-        app:layout_constraintStart_toEndOf="@id/verticalStart"
-        app:layout_constraintTop_toBottomOf="@id/tilEmail"
-        app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/white"
-        app:startIconDrawable="@drawable/ic_password">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etLoginPassword"
-            style="@style/Style.Pathik.EditText"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalBottom"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:maxLength="30"
-            tools:text="12345678" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBack"
+            style="@style/Style.Pathik.Primary.Button.Icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:icon="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="@id/verticalStart"
+            app:layout_constraintTop_toTopOf="@id/horizontalStart" />
 
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLoginTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="start"
+            android:text="@string/let_s_sign_you_in"
+            android:textAppearance="@style/TextAppearance.Pathik.Headline4"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+            app:layout_constraintStart_toStartOf="@id/verticalStart"
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/btnForget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/forget_password"
-        android:textAppearance="@style/TextAppearance.Pathik.Subtitle1"
-        android:textColor="@color/white_old_lace"
-        app:layout_constraintStart_toEndOf="@id/verticalStart"
-        app:layout_constraintTop_toBottomOf="@id/tilPassword" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLoginSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:gravity="start"
+            android:text="@string/welcome_back_nyou_ve_been_missed"
+            android:textAppearance="@style/TextAppearance.Pathik.Headline5"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/verticalStart"
+            app:layout_constraintTop_toBottomOf="@id/tvLoginTitle" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:text="@string/dont_have_an_account"
-        android:textAppearance="@style/TextAppearance.Pathik.Body1"
-        android:textColor="@color/gray_400"
-        app:layout_constraintBottom_toTopOf="@id/btnSignIn"
-        app:layout_constraintEnd_toStartOf="@id/btnRegister"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/verticalStart"
-        app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEmail"
+            style="@style/Style.Pathik.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="@id/verticalEnd"
+            app:layout_constraintStart_toEndOf="@id/verticalStart"
+            app:layout_constraintTop_toBottomOf="@id/tvLoginSubtitle"
+            app:startIconDrawable="@drawable/ic_email">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/btnRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginBottom="12dp"
-        android:text="@string/register"
-        android:textAppearance="@style/TextAppearance.Pathik.Subtitle1"
-        android:textColor="@color/white_old_lace"
-        app:layout_constraintBottom_toTopOf="@id/btnSignIn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/tvAccount" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLoginEmail"
+                style="@style/Style.Pathik.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                tools:text="info@mr0kaushik.com" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPassword"
+            style="@style/Style.Pathik.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+            app:layout_constraintStart_toEndOf="@id/verticalStart"
+            app:layout_constraintTop_toBottomOf="@id/tilEmail"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/white"
+            app:startIconDrawable="@drawable/ic_password">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLoginPassword"
+                style="@style/Style.Pathik.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:maxLength="30"
+                tools:text="12345678" />
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSignIn"
-        style="@style/Style.Pathik.Primary.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/sign_in"
-        app:layout_constraintBottom_toTopOf="@id/horizontalBottom"
-        app:layout_constraintEnd_toStartOf="@id/verticalEnd"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="@id/verticalStart" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnForget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/forget_password"
+            android:textAppearance="@style/TextAppearance.Pathik.Subtitle1"
+            android:textColor="@color/white_old_lace"
+            app:layout_constraintStart_toEndOf="@id/verticalStart"
+            app:layout_constraintTop_toBottomOf="@id/tilPassword" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="@string/dont_have_an_account"
+            android:textAppearance="@style/TextAppearance.Pathik.Body1"
+            android:textColor="@color/gray_400"
+            app:layout_constraintBottom_toTopOf="@id/btnSignIn"
+            app:layout_constraintEnd_toStartOf="@id/btnRegister"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/verticalStart"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/register"
+            android:textAppearance="@style/TextAppearance.Pathik.Subtitle1"
+            android:textColor="@color/white_old_lace"
+            app:layout_constraintBottom_toTopOf="@id/btnSignIn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/tvAccount" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSignIn"
+            style="@style/Style.Pathik.Primary.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/sign_in"
+            app:layout_constraintBottom_toTopOf="@id/horizontalBottom"
+            app:layout_constraintEnd_toStartOf="@id/verticalEnd"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/verticalStart" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.core.widget.NestedScrollView>

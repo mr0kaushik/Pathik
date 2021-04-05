@@ -3,13 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".ui.fragments.register.RegisterFragment">
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.profile.ProfileFragment">
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/mid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horizontalStart"
@@ -49,18 +58,16 @@
             app:layout_constraintTop_toTopOf="@id/horizontalStart" />
 
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/registerTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:gravity="start"
-            android:text="@string/let_s_sign_you_up"
-            android:textAppearance="@style/TextAppearance.Pathik.Headline4"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@id/verticalEnd"
-            app:layout_constraintStart_toStartOf="@id/verticalStart"
-            app:layout_constraintTop_toBottomOf="@id/btnBack" />
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:civ_border_width="4dp"
+            app:civ_border_color="@color/gray_78"
+            tools:src="@drawable/ic_user_place_holder"
+            app:layout_constraintBottom_toTopOf="@+id/mid"
+            app:layout_constraintEnd_toStartOf="@+id/verticalEnd"
+            app:layout_constraintStart_toStartOf="@+id/verticalStart" />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -71,7 +78,7 @@
             android:layout_marginTop="32dp"
             app:layout_constraintEnd_toStartOf="@id/verticalEnd"
             app:layout_constraintStart_toEndOf="@id/verticalStart"
-            app:layout_constraintTop_toBottomOf="@id/registerTitle"
+            app:layout_constraintTop_toBottomOf="@id/ivProfile"
             app:startIconDrawable="@drawable/ic_user">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -184,49 +191,21 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:text="@string/already_a_member"
-            android:textAppearance="@style/TextAppearance.Pathik.Body1"
-            android:textColor="@color/gray_400"
-            app:layout_constraintBottom_toTopOf="@id/btnRegister"
-            app:layout_constraintEnd_toStartOf="@id/btnSignIn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@id/verticalStart"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/btnSignIn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginBottom="12dp"
-            android:text="@string/sign_in"
-            android:textAppearance="@style/TextAppearance.Pathik.Subtitle1"
-            android:textColor="@color/white_old_lace"
-            app:layout_constraintBottom_toTopOf="@id/btnRegister"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/verticalEnd"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/tvAccount" />
-
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
             style="@style/Style.Pathik.Primary.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="@string/register"
+            android:text="@string/save"
             app:layout_constraintBottom_toTopOf="@id/horizontalEnd"
             app:layout_constraintEnd_toStartOf="@id/verticalEnd"
             app:layout_constraintStart_toEndOf="@id/verticalStart" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 
 </androidx.core.widget.NestedScrollView>

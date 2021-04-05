@@ -1,4 +1,4 @@
-package com.pathik.ride.ui.forget
+package com.pathik.ride.ui.fragments.forget
 
 import android.os.Bundle
 import android.text.Editable
@@ -12,11 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.FirebaseException
 import com.pathik.ride.R
 import com.pathik.ride.databinding.FragmentForgetPasswordBinding
 import com.pathik.ride.network.Resource
-import com.pathik.ride.ui.login.LoginFragmentDirections
 import com.pathik.ride.utils.Util
 import com.pathik.ride.utils.getProgressDialog
 import com.pathik.ride.utils.snackbar
@@ -31,6 +30,7 @@ class ForgetPasswordFragment : Fragment(R.layout.fragment_forget_password) {
     private lateinit var binding: FragmentForgetPasswordBinding
 
     private val viewModel by viewModels<ForgetPasswordViewModel>()
+
     private var progressDialog: AlertDialog? = null
 
 
@@ -47,36 +47,42 @@ class ForgetPasswordFragment : Fragment(R.layout.fragment_forget_password) {
 
         binding.btnGetRecoveryEmail.setOnClickListener {
             if (validateForm()) {
-                viewModel.resetEmail(binding.etEmail.text.toString())
+                getRecoveryMail()
             }
-        }
 
-        viewModel.resetMailSent.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Loading -> {
-                    Timber.i("Show Dialog")
-                    progressDialog =
-                        requireContext().getProgressDialog(R.string.logging_in).show()
-                }
-                is Resource.Success -> {
-                    progressDialog?.hide()
-                    lifecycleScope.launch {
-                        Timber.i("User Logged In");
-                        binding.root.snackbar("Reset email sent")
-                        navController.navigate(LoginFragmentDirections.actionLoginFragmentToMainActivity())
+        }
+    }
+
+    private fun getRecoveryMail() {
+        viewModel.forgetPassword(
+            binding.etEmail.text.toString(),
+        ).observe(
+            viewLifecycleOwner, Observer {
+                when (it) {
+                    is Resource.Loading -> {
+                        progressDialog =
+                            requireContext().getProgressDialog(R.string.sending_recovery_email)
+                                .show()
                     }
-                }
-                is Resource.Failure -> {
-                    progressDialog?.hide()
-                    Timber.e(it.exception)
-                    if (it.exception is FirebaseAuthException) {
-                        binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
-                    } else {
-                        binding.root.snackbar("An error occurred !!")
+                    is Resource.Success -> {
+                        progressDialog?.hide()
+                        lifecycleScope.launch {
+                            binding.root.snackbar(getString(R.string.recovery_email_sent))
+                            navController.popBackStack()
+                        }
+                    }
+                    is Resource.Failure -> {
+                        progressDialog?.hide()
+                        Timber.e(it.exception)
+                        if (it.exception is FirebaseException) {
+                            binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
+                        } else {
+                            binding.root.snackbar(getString(R.string.an_error_occur))
+                        }
                     }
                 }
             }
-        })
+        )
     }
 
     private fun validateForm(): Boolean {

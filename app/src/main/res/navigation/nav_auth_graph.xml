@@ -7,13 +7,13 @@
 
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.pathik.ride.MainActivity"
+        android:name="com.pathik.ride.ui.activities.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.pathik.ride.ui.login.LoginFragment"
+        android:name="com.pathik.ride.ui.fragments.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -35,7 +35,7 @@
     </fragment>
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.pathik.ride.ui.auth.WelcomeFragment"
+        android:name="com.pathik.ride.ui.fragments.auth.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome">
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.pathik.ride.ui.register.RegisterFragment"
+        android:name="com.pathik.ride.ui.fragments.register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register">
         <action
@@ -70,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/forgetPasswordFragment"
-        android:name="com.pathik.ride.ui.forget.ForgetPasswordFragment"
+        android:name="com.pathik.ride.ui.fragments.forget.ForgetPasswordFragment"
         android:label="fragment_forget_password"
         tools:layout="@layout/fragment_forget_password" />
 </navigation>

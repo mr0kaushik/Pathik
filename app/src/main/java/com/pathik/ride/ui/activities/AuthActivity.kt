@@ -1,10 +1,9 @@
-package com.pathik.ride.ui.auth
+package com.pathik.ride.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.pathik.ride.MainActivity
 import com.pathik.ride.R
 import dagger.hilt.android.AndroidEntryPoint
 
