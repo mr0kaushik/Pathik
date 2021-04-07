@@ -13,14 +13,18 @@ object UserPref {
     const val KEY_USER_PROFILE_URL = "user_profile_url"
 
     private val pref = PathikApp.context()
-        .getSharedPreferences("pathik_pref", Context.MODE_PRIVATE)
+        .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
     fun putString(key: String, value: String) {
-        pref.edit().putString("user_id", value).apply()
+        pref.edit().putString(key, value).apply()
     }
 
     fun getString(key: String): String {
         return pref.getString(key, "") ?: ""
+    }
+
+    fun clearAll() {
+        return pref.edit().clear().apply()
     }
 
 

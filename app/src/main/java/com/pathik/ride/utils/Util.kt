@@ -10,35 +10,53 @@ import android.os.Build
 import android.provider.MediaStore
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.pathik.ride.BuildConfig
 import com.pathik.ride.R
 import java.io.ByteArrayOutputStream
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 object Util {
+    const val PERMISSIONS_REQUEST_CAMERA = 1
+    const val PERMISSIONS_REQUEST_READ_STORAGE = 2
+    const val PERMISSIONS_REQUEST_READ_CONTACTS = 3
+    const val REQUEST_GALLERY_IMAGE = 4
+    const val REQUEST_IMAGE_CAPTURE = 5
+    const val REQUEST_CODE_VERIFY_EMAIL = 102
+
+
     fun setTransparentWindow(window: Window) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-
-            window.setDecorFitsSystemWindows(false)
-        } else {
-            window.statusBarColor = Color.TRANSPARENT
-            window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_FULLSCREEN
-        }
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            val winParams = window.attributes
-//            winParams.flags =
-//                winParams.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
-//            window.attributes = winParams
+//        window.statusBarColor = Color.TRANSPARENT
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            window.setDecorFitsSystemWindows(false)
+//            window.statusBarColor = Color.TRANSPARENT
+//        } else {
+//            window.statusBarColor = Color.TRANSPARENT
 //            window.decorView.systemUiVisibility =
-//                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_FULLSCREEN
 //        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val winParams = window.attributes
+            winParams.flags =
+                winParams.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
+            window.attributes = winParams
+            window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        }
     }
 
     fun dpToPx(dp: Float): Int {
@@ -135,6 +153,15 @@ object Util {
 
             }
         }
+
+    }
+
+    fun currencyFormat(amount: Double): String {
+        val formatter = DecimalFormat("###,###,##0.00")
+        return "\u20B9 ${formatter.format(amount)}"
+    }
+
+    fun prettyDateFormatter(timestamp: Timestamp){
 
     }
 

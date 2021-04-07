@@ -80,12 +80,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     }
                     is Resource.Success -> {
                         progressDialog?.hide()
-                        lifecycleScope.launch {
-                            UserPref.putString(UserPref.KEY_NAME, it.value.name!!)
-                            UserPref.putString(UserPref.KEY_EMAIL, it.value.email!!)
-                            binding.root.snackbar(getString(R.string.welcome_back, it.value.name))
-                            navController.navigate(LoginFragmentDirections.actionLoginFragmentToMainActivity())
-                        }
+                        binding.root.snackbar(getString(R.string.welcome_back, it.value.name))
+                        navController.navigate(LoginFragmentDirections.actionLoginFragmentToMainActivity())
                     }
                     is Resource.Failure -> {
                         progressDialog?.hide()

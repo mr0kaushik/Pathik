@@ -64,5 +64,28 @@
     <string name="enable_gps">Enable GPS</string>
     <string name="required_for_this_app">Gps required to show current location, please enable locations in settings.</string>
     <string name="enable_now">Open Settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="no_thanks">No thanks!!</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="my_trips">My Trips</string>
+    <string name="menu_profile_content_description">Profile</string>
+    <string name="menu_my_trip_content_description">My Trips</string>
+    <string name="menu_payment_content_description">Payment</string>
+    <string name="menu_settings_content_description">Settings</string>
+    <string name="wallet">Wallets</string>
+    <string name="card">Credit/Debit Card</string>
+    <string name="add_card">Add Card</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="custom_month_year_separator">/</string>
+    <string name="only_add_separator">+</string>
+    <string name="first_month_and_separator_input_by_user">-</string>
+    <string name="link">Link</string>
+    <string name="check_balance">Check Balance</string>
+    <string name="upi">UPI</string>
+    <string name="add_credi_card">Add Card</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

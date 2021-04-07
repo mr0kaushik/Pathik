@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import com.google.firebase.auth.FirebaseAuth
 import com.pathik.ride.network.FirebaseDataSource
 import com.pathik.ride.network.Resource
+import com.pathik.ride.utils.UserPref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await

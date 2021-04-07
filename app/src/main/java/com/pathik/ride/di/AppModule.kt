@@ -1,19 +1,13 @@
 package com.pathik.ride.di
 
-import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.pathik.ride.R
-import com.pathik.ride.network.FirebaseAuthSource
 import com.pathik.ride.network.FirebaseDataSource
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.RequestCreator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -45,14 +39,6 @@ object AppModule {
         return FirebaseStorage.getInstance().reference
     }
 
-    @Singleton
-    @Provides
-    fun getAuthSource(
-        firebaseAuth: FirebaseAuth,
-        fireStore: FirebaseFirestore
-    ): FirebaseAuthSource {
-        return FirebaseAuthSource(firebaseAuth, fireStore)
-    }
 
     @Singleton
     @Provides

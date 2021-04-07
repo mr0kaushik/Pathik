@@ -39,8 +39,29 @@
     </style>
 
 
-    <style name="MAlertDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+    <!--    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">-->
+    <!--        <item name="colorPrimary">@color/black_ebony</item>-->
+    <!--        <item name="colorSecondary">@color/shrine_pink_100</item>-->
+    <!--        <item name="colorSurface">@color/shrine_pink_light</item>-->
+    <!--        <item name="colorOnSurface">@color/shrine_pink_900</item>-->
+    <!--        <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>-->
+    <!--        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text</item>-->
+    <!--        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>-->
+    <!--        <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button</item>-->
+    <!--    </style>-->
+
+    <style name="MaterialAlertDialog.App.Title.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/white_smoke</item>
+    </style>
+
+
+    <style name="MAlertDialogStyle" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/black_ebony</item>
+        <item name="colorSurface">@color/black_ebony</item>
+        <item name="colorOnSurface">@color/white_smoke</item>
         <item name="android:fontFamily">@font/poppins</item>
+        <item name="buttonBarButtonStyle">@style/Style.Pathik.Button.Text</item>
+        <item name="android:textColor">@color/white</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Pathik.MediumComponent.Dialog</item>
         <item name="android:background">@color/black_ebony</item>
         <item name="android:colorAccent">@color/white_old_lace</item>
@@ -65,13 +86,18 @@
 
     <style name="StyleDrawerMenuItem" parent="">
         <item name="itemTextAppearance">@style/TextAppearance.Pathik.Subtitle1</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="itemMaxLines">1</item>
         <item name="android:letterSpacing">1.3</item>
-        <item name="android:paddingTop">4dp</item>
-        <item name="android:paddingBottom">4dp</item>
-        <item name="itemTextColor">@color/drawer_menu_item_state</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="colorSurface">@color/colorError</item>
+        <!--        <item name="itemTextColor">@color/drawer_menu_item_state</item>-->
     </style>
 
+    <style name="Style.Pathik.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAppearance">@style/TextAppearance.Pathik.Button</item>
+        <item name="android:textColor">@color/white_smoke</item>
+    </style>
 
 </resources>

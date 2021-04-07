@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
+    android:clipToPadding="false"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    app:statusBarBackground="@android:color/transparent"
-    tools:context=".ui.fragments.map.MapsFragment">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,6 +22,7 @@
 
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginStart="16dp"
@@ -110,16 +109,17 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:src="@drawable/ic_location_pin"
                 android:id="@+id/ivLocationPicker"
-                android:layout_gravity="center"
                 android:layout_width="32dp"
-                android:layout_height="32dp" />
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_location_pin" />
 
 
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnMyLocation"
@@ -132,5 +132,6 @@
         app:fabSize="mini"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         app:srcCompat="@drawable/ic_my_location" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

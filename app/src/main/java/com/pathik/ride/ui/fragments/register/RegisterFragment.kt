@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.google.firebase.Timestamp
@@ -23,7 +22,6 @@ import com.pathik.ride.utils.Util
 import com.pathik.ride.utils.getProgressDialog
 import com.pathik.ride.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -61,39 +59,37 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         binding.btnRegister.setOnClickListener {
             val user = validateAllFields()
             if (user != null) {
-               register(user)
+                register(user)
             }
         }
     }
 
     private fun register(user: User) {
-        viewModel.register(user, binding.etPassword.text.toString()).observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Loading -> {
-                    Timber.i("Show Dialog")
-                    progressDialog = requireContext().getProgressDialog(R.string.signing_up).show()
-                }
-                is Resource.Success -> {
-                    progressDialog?.hide()
-                    lifecycleScope.launch {
+        viewModel.register(user, binding.etPassword.text.toString())
+            .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    is Resource.Loading -> {
+                        Timber.i("Show Dialog")
+                        progressDialog =
+                            requireContext().getProgressDialog(R.string.signing_up).show()
+                    }
+                    is Resource.Success -> {
+                        progressDialog?.hide()
                         Timber.i("User Logged In")
-                        UserPref.putString(UserPref.KEY_NAME, it.value.name!!)
-                        UserPref.putString(UserPref.KEY_EMAIL, it.value.email!!)
                         binding.root.snackbar("Successfully Registered !!")
                         navController.navigate(RegisterFragmentDirections.actionRegisterFragmentToMainActivity())
                     }
-                }
-                is Resource.Failure -> {
-                    progressDialog?.hide()
-                    Timber.e(it.exception)
-                    if (it.exception is FirebaseAuthException) {
-                        binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
-                    } else {
-                        binding.root.snackbar("An error occurred !!")
+                    is Resource.Failure -> {
+                        progressDialog?.hide()
+                        Timber.e(it.exception)
+                        if (it.exception is FirebaseAuthException) {
+                            binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
+                        } else {
+                            binding.root.snackbar("An error occurred !!")
+                        }
                     }
                 }
-            }
-        })
+            })
     }
 
     private val signUpTextWatcher: TextWatcher = object : TextWatcher {
@@ -167,8 +163,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
 
 
-        // TODO REGISTER CALLBACK
-        Timber.i("Send Register Call")
         return User(name = name, createdAt = Timestamp.now(), email = email, phoneNumber = phone);
     }
 

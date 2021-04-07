@@ -13,7 +13,6 @@
             <shape>
                 <corners android:radius="5dip" />
                 <solid android:color="@color/black_ebony" />
-
             </shape>
         </clip>
     </item>

@@ -3,23 +3,35 @@
 
 
     <item
-        android:id="@+id/profile"
+        android:id="@+id/menu_profile"
+        android:icon="@drawable/ic_profile"
+        android:contentDescription="@string/menu_profile_content_description"
+        android:menuCategory="secondary"
         android:title="@string/profile" />
 
     <item
-        android:id="@+id/payment"
-        android:title="@string/payment" />
+        android:id="@+id/menu_my_trip"
+        android:icon="@drawable/ic_destination"
+        android:contentDescription="@string/menu_my_trip_content_description"
+        android:menuCategory="secondary"
 
-    <item
-        android:id="@+id/setting"
-        android:title="@string/setting" />
-
-    <item
-        android:id="@+id/my_trip"
         android:title="@string/my_trip" />
 
     <item
-        android:id="@+id/about"
-        android:title="@string/about" />
+        android:id="@+id/menu_payment"
+        android:contentDescription="@string/menu_payment_content_description"
+        android:icon="@drawable/ic_credit_card"
+        android:menuCategory="secondary"
+        android:title="@string/payment" />
+
+    <item
+        android:id="@+id/menu_setting"
+        android:contentDescription="@string/menu_settings_content_description"
+        android:icon="@drawable/ic_settings"
+        android:menuCategory="secondary"
+        android:title="@string/setting" />
+<!--    <item-->
+<!--        android:id="@+id/menu_about"-->
+<!--        android:title="@string/about" />-->
 
 </menu>

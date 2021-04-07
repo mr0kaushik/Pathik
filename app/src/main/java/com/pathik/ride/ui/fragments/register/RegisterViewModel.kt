@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.pathik.ride.model.User
 import com.pathik.ride.network.FirebaseDataSource
 import com.pathik.ride.network.Resource
+import com.pathik.ride.utils.UserPref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -28,6 +29,8 @@ constructor(
             user.createdAt = Timestamp.now()
             user.updatedAt = Timestamp.now()
             firebaseDataSource.setUserInfo(result.user?.uid!!, user.toMap)
+            UserPref.putString(UserPref.KEY_NAME, user.name!!)
+            UserPref.putString(UserPref.KEY_EMAIL, user.email)
             emit(Resource.Success(user))
         } catch (e: Exception) {
             emit(Resource.Failure(e))
