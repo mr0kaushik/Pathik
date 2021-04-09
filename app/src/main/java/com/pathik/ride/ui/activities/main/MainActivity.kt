@@ -172,6 +172,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap ?: return
         dragEnable = true
+        contentBinding.ivLocationPicker.visible(true)
         with(mMap) {
             setOnCameraIdleListener(this@MainActivity)
             setOnCameraMoveStartedListener(this@MainActivity)

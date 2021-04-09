@@ -129,7 +129,8 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:paddingBottom="4dp"
-                android:src="@drawable/ic_location_icon" />
+                android:src="@drawable/ic_location_icon"
+                android:visibility="gone" />
 
 
         </FrameLayout>
