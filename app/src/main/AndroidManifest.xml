@@ -2,14 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pathik.ride">
 
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the "MyLocation" functionality.
-    -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:name=".PathikApp"
@@ -18,6 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.Pathik">
 
         <!--
@@ -36,7 +33,7 @@
             android:name=".ui.activities.AuthActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/SplashTheme"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustUnspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,16 +43,34 @@
 
         <activity
             android:name=".ui.activities.MainActivity"
-            android:theme="@style/Theme.Pathik.MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.Pathik.MainActivity" />
         <activity
             android:name=".ui.activities.profile.ProfileActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize">
+
+            <intent-filter>
+                <action android:name="android.media.action.IMAGE_CAPTURE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.GET_CONTENT" />-->
+<!--                <data android:type="image/*" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                &lt;!&ndash; The OPENABLE category declares that the returned file is accessible-->
+<!--                     from a content provider that supports OpenableColumns-->
+<!--                     and ContentResolver.openFileDescriptor() &ndash;&gt;-->
+<!--                <category android:name="android.intent.category.OPENABLE" />-->
+<!--            </intent-filter>-->
+
+        </activity>
         <activity
             android:name=".ui.activities.payment.PaymentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".ui.activities.settings.SettingsActivity"
+            android:theme="@style/Theme.Pathik.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".ui.activities.trip.TripActivity"
@@ -72,6 +87,18 @@
         <activity
             android:name=".ui.activities.SplashActivity"
             android:theme="@style/SplashTheme" />
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
+
     </application>
 
 </manifest>

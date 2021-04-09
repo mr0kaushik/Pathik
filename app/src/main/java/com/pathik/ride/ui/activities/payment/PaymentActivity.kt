@@ -39,17 +39,11 @@ class PaymentActivity : AppCompatActivity() {
         setContentView(binding.root)
         setViewVisible(false)
 
-//        window.setDecorFitsSystemWindows(false)
-
-        window?.run{
-            WindowCompat.setDecorFitsSystemWindows(this, false)
-        }
         val appBarLayoutBinding = AppBarLayoutBinding.bind(binding.root.getChildAt(0))
         appBarLayoutBinding.tvAppBarTitle.text = getString(R.string.payment)
         appBarLayoutBinding.btnBack.setOnClickListener {
             onBackPressed()
         }
-
 
         walletAdapter = WalletAdapter(this) {
             binding.root.snackbar("Linking of ${it.name} is in progress!!")
@@ -80,10 +74,8 @@ class PaymentActivity : AppCompatActivity() {
             when (it) {
                 is Resource.Loading -> {
                     if (!fromSwipe) binding.swipeRefreshLayout.isRefreshing = true
-                    Timber.i("loading")
                 }
                 is Resource.Success -> {
-                    Timber.i("Success")
                     upis = it.value.first
                     wallets = it.value.second
                     walletAdapter.updateWalletList(wallets)
@@ -93,7 +85,6 @@ class PaymentActivity : AppCompatActivity() {
                     setViewVisible(true)
                 }
                 is Resource.Failure -> {
-                    Timber.e("Failure")
                     binding.swipeRefreshLayout.isRefreshing = false
                     binding.root.snackbar(
                         it.exception?.message!!,

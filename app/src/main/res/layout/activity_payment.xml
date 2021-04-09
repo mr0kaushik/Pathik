@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ui.activities.payment.PaymentActivity">
 
     <include layout="@layout/app_bar_layout" />
@@ -48,13 +47,6 @@
                     android:overScrollMode="never"
                     tools:itemCount="3"
                     tools:listitem="@layout/wallet_item" />
-
-
-                <!--                <View-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="0.5dp"-->
-                <!--                    android:layout_margin="8dp"-->
-                <!--                    android:background="@color/gray_78" />-->
 
 
                 <androidx.appcompat.widget.AppCompatTextView

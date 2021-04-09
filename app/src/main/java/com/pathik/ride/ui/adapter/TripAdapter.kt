@@ -7,8 +7,8 @@ import com.pathik.ride.databinding.TripItemBinding
 import com.pathik.ride.model.Trip
 import com.pathik.ride.utils.Util
 
-class TripAdapter(private val list: List<Trip>) : RecyclerView.Adapter<TripAdapter.TripViewHolder>() {
-
+class TripAdapter(private val list: List<Trip>) :
+    RecyclerView.Adapter<TripAdapter.TripViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder {
         return TripViewHolder(
@@ -22,7 +22,8 @@ class TripAdapter(private val list: List<Trip>) : RecyclerView.Adapter<TripAdapt
 
     override fun onBindViewHolder(holder: TripViewHolder, position: Int) {
         val trip = list[position]
-        holder.binding.tvDate.text = trip.date.toString()
+        val dat = Util.prettyDateFormatter(trip.date)
+        holder.binding.tvDate.text = dat
         holder.binding.tvVehicleInfo.text = trip.vehicleInfo
         holder.binding.tvAmount.text = Util.currencyFormat(trip.amount)
         holder.binding.tvSource.text = trip.source
@@ -30,7 +31,6 @@ class TripAdapter(private val list: List<Trip>) : RecyclerView.Adapter<TripAdapt
     }
 
     override fun getItemCount(): Int = list.size
-
 
     class TripViewHolder(val binding: TripItemBinding) : RecyclerView.ViewHolder(binding.root) {
 

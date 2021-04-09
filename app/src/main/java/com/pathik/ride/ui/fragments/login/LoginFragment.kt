@@ -16,7 +16,6 @@ import com.google.firebase.FirebaseException
 import com.pathik.ride.R
 import com.pathik.ride.databinding.FragmentLoginBinding
 import com.pathik.ride.network.Resource
-import com.pathik.ride.utils.UserPref
 import com.pathik.ride.utils.Util
 import com.pathik.ride.utils.getProgressDialog
 import com.pathik.ride.utils.snackbar
@@ -74,22 +73,29 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             viewLifecycleOwner, Observer {
                 when (it) {
                     is Resource.Loading -> {
-                        Timber.i("Show Dialog")
-                        progressDialog =
-                            requireContext().getProgressDialog(R.string.logging_in).show()
+                        lifecycleScope.launch {
+                            progressDialog =
+                                requireContext().getProgressDialog(R.string.logging_in).show()
+                        }
                     }
+
                     is Resource.Success -> {
-                        progressDialog?.hide()
-                        binding.root.snackbar(getString(R.string.welcome_back, it.value.name))
-                        navController.navigate(LoginFragmentDirections.actionLoginFragmentToMainActivity())
+                        lifecycleScope.launch {
+                            progressDialog?.dismiss()
+                            binding.root.snackbar(getString(R.string.welcome_back, it.value.name))
+                            navController.navigate(LoginFragmentDirections.actionLoginFragmentToMainActivity())
+                            requireActivity().finishAffinity()
+                        }
                     }
                     is Resource.Failure -> {
-                        progressDialog?.hide()
-                        Timber.e(it.exception)
-                        if (it.exception is FirebaseException) {
-                            binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
-                        } else {
-                            binding.root.snackbar(getString(R.string.an_error_occur))
+                        lifecycleScope.launch {
+                            progressDialog?.dismiss()
+                            Timber.e(it.exception)
+                            if (it.exception is FirebaseException) {
+                                binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
+                            } else {
+                                binding.root.snackbar(getString(R.string.an_error_occur))
+                            }
                         }
                     }
                 }
@@ -127,6 +133,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         return true;
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (progressDialog?.isShowing == true) {
+            progressDialog?.dismiss()
+        }
+    }
+
 
     private fun resetErrors() {
         binding.tilEmail.error = null

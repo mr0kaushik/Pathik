@@ -60,24 +60,29 @@ class ForgetPasswordFragment : Fragment(R.layout.fragment_forget_password) {
             viewLifecycleOwner, Observer {
                 when (it) {
                     is Resource.Loading -> {
-                        progressDialog =
-                            requireContext().getProgressDialog(R.string.sending_recovery_email)
-                                .show()
+                        lifecycleScope.launch {
+
+                            progressDialog =
+                                requireContext().getProgressDialog(R.string.sending_recovery_email)
+                                    .show()
+                        }
                     }
                     is Resource.Success -> {
-                        progressDialog?.hide()
                         lifecycleScope.launch {
+                            progressDialog?.dismiss()
                             binding.root.snackbar(getString(R.string.recovery_email_sent))
                             navController.popBackStack()
                         }
                     }
                     is Resource.Failure -> {
-                        progressDialog?.hide()
-                        Timber.e(it.exception)
-                        if (it.exception is FirebaseException) {
-                            binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
-                        } else {
-                            binding.root.snackbar(getString(R.string.an_error_occur))
+                        lifecycleScope.launch {
+                            Timber.e(it.exception)
+                            progressDialog?.dismiss()
+                            if (it.exception is FirebaseException) {
+                                binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
+                            } else {
+                                binding.root.snackbar(getString(R.string.an_error_occur))
+                            }
                         }
                     }
                 }
@@ -116,6 +121,13 @@ class ForgetPasswordFragment : Fragment(R.layout.fragment_forget_password) {
     private fun resetErrors() {
         binding.tilEmail.error = null
         binding.tilEmail.isErrorEnabled = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (progressDialog?.isShowing == true) {
+            progressDialog?.dismiss()
+        }
     }
 
 

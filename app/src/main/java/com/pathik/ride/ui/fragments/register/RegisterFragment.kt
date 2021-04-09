@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.google.firebase.Timestamp
@@ -17,11 +18,11 @@ import com.pathik.ride.R
 import com.pathik.ride.databinding.FragmentRegisterBinding
 import com.pathik.ride.model.User
 import com.pathik.ride.network.Resource
-import com.pathik.ride.utils.UserPref
 import com.pathik.ride.utils.Util
 import com.pathik.ride.utils.getProgressDialog
 import com.pathik.ride.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -69,23 +70,29 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
                     is Resource.Loading -> {
-                        Timber.i("Show Dialog")
-                        progressDialog =
-                            requireContext().getProgressDialog(R.string.signing_up).show()
+                        lifecycleScope.launch {
+                            progressDialog =
+                                requireContext().getProgressDialog(R.string.signing_up).show()
+                        }
                     }
                     is Resource.Success -> {
-                        progressDialog?.hide()
-                        Timber.i("User Logged In")
-                        binding.root.snackbar("Successfully Registered !!")
-                        navController.navigate(RegisterFragmentDirections.actionRegisterFragmentToMainActivity())
+                        lifecycleScope.launch {
+                            progressDialog?.dismiss()
+                            Timber.i("User Logged In")
+                            binding.root.snackbar("Successfully Registered !!")
+                            navController.navigate(RegisterFragmentDirections.actionRegisterFragmentToMainActivity())
+                            requireActivity().finishAffinity()
+                        }
                     }
                     is Resource.Failure -> {
-                        progressDialog?.hide()
-                        Timber.e(it.exception)
-                        if (it.exception is FirebaseAuthException) {
-                            binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
-                        } else {
-                            binding.root.snackbar("An error occurred !!")
+                        lifecycleScope.launch {
+                            progressDialog?.dismiss()
+                            Timber.e(it.exception)
+                            if (it.exception is FirebaseAuthException) {
+                                binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
+                            } else {
+                                binding.root.snackbar("An error occurred !!")
+                            }
                         }
                     }
                 }
@@ -174,4 +181,12 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         binding.tilConfirmPassword.error = null
         binding.tilConfirmPassword.isErrorEnabled = false
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (progressDialog?.isShowing == true) {
+            progressDialog?.dismiss()
+        }
+    }
+
 }

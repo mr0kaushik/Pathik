@@ -9,12 +9,12 @@ enum class Gender(value: String) {
 
 data class User(
     var updatedAt: Timestamp? = null,
-    val email: String? = "",
-    var userId: String? = "",
-    val name: String? = "",
-    val phoneNumber: String? = "",
-    val photoUrl: String? = "",
-    var gender: Gender? = Gender.MALE,
+    var email: String = "",
+    var userId: String = "",
+    var name: String = "",
+    var phoneNumber: String = "",
+    var photoUrl: String = "",
+    var gender: Gender = Gender.MALE,
     var createdAt: Timestamp? = null
 ) {
 
@@ -23,18 +23,18 @@ data class User(
         fun DocumentSnapshot.toUser(): User {
 
             return User(
-                email = getString("email"),
-                userId = getString("userId"),
-                name = getString("name"),
-                phoneNumber = getString("phoneNumber"),
-                photoUrl = getString("photoUrl"),
+                email = getString("email") ?: "",
+                userId = getString("userId") ?: "",
+                name = getString("name") ?: "",
+                phoneNumber = getString("phoneNumber") ?: "",
+                photoUrl = getString("photoUrl") ?: "",
                 gender = Gender.valueOf(getString("gender") ?: "Male")
             )
 
         }
     }
 
-    val toMap = hashMapOf<String, Any?>(
+    fun toMap() = hashMapOf<String, Any>(
         "updatedAt" to (updatedAt ?: Timestamp.now()),
         "createdAt" to (updatedAt ?: Timestamp.now()),
         "email" to email,
@@ -42,6 +42,6 @@ data class User(
         "name" to name,
         "phoneNumber" to phoneNumber,
         "photoUrl" to "",
-        "gender" to (gender?.name ?: "Male")
+        "gender" to (gender.name)
     )
 }

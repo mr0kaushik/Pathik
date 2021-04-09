@@ -1,46 +1,46 @@
-package com.pathik.ride.ui.fragments.login
+package com.pathik.ride.ui.activities.profile
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.google.firebase.auth.FirebaseAuth
 import com.pathik.ride.network.FirebaseDataSource
 import com.pathik.ride.network.Resource
-import com.pathik.ride.utils.UserPref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel
+class ProfileViewModel
 @Inject
 constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirebaseDataSource: FirebaseDataSource
 ) : ViewModel() {
 
-
-    fun login(email: String, password: String) =
+    fun fetchUserData() =
         liveData(Dispatchers.IO) {
             emit(Resource.Loading)
             try {
-                val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-                val user = firebaseFirebaseDataSource.fetchUserInfo(result?.user?.uid!!)
+                val user = firebaseFirebaseDataSource.fetchUserInfo(firebaseAuth.currentUser?.uid!!)
                 emit(user)
             } catch (e: Exception) {
                 emit(Resource.Failure(e))
             }
         }
 
-    fun logout() = liveData(Dispatchers.IO) {
-        emit(Resource.Loading)
-        try {
-            firebaseAuth.signOut()
-            UserPref.clearAll()
-            emit(Resource.Success(true))
-        } catch (e: Exception) {
-            emit(Resource.Failure(e))
+
+    fun saveUserData(bitmap: Bitmap? = null, data: HashMap<String, Any>) =
+        liveData(Dispatchers.IO) {
+            emit(Resource.Loading)
+            try {
+                val uId = firebaseAuth.currentUser?.uid!!
+                firebaseFirebaseDataSource.setProfileWithData(uId, bitmap, data)
+                emit(firebaseFirebaseDataSource.fetchUserInfo(uId))
+            } catch (e: Exception) {
+                emit(Resource.Failure(e))
+            }
         }
-    }
+
 
 }

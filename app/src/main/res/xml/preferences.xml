@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:key="pref_key_notification"
+        app:title="Notifications" />
+
+    <Preference
+        app:key="pref_key_version"
+        app:summary="@string/version_name"
+        app:title="Build Version" />
+
+    <Preference
+        app:key="@string/pref_key_logout"
+        app:title="Logout" />
+
+
+</androidx.preference.PreferenceScreen>

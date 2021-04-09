@@ -1,17 +1,17 @@
 package com.pathik.ride.utils
 
+import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
-import android.content.res.Resources
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
-import android.view.View
+import android.provider.OpenableColumns
 import android.view.Window
-import android.view.WindowManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.core.content.FileProvider
+import androidx.core.view.WindowCompat
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -21,12 +21,15 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.pathik.ride.BuildConfig
 import com.pathik.ride.R
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import kotlin.math.roundToInt
+
 
 object Util {
     const val PERMISSIONS_REQUEST_CAMERA = 1
@@ -37,43 +40,11 @@ object Util {
     const val REQUEST_CODE_VERIFY_EMAIL = 102
 
 
-    fun setTransparentWindow(window: Window) {
-//        window.statusBarColor = Color.TRANSPARENT
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            window.setDecorFitsSystemWindows(false)
-//            window.statusBarColor = Color.TRANSPARENT
-//        } else {
-//            window.statusBarColor = Color.TRANSPARENT
-//            window.decorView.systemUiVisibility =
-//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_FULLSCREEN
-//        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val winParams = window.attributes
-            winParams.flags =
-                winParams.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
-            window.attributes = winParams
-            window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+    fun setTransparentWindow(window: Window?) {
+        window?.run {
+            WindowCompat.setDecorFitsSystemWindows(this, false)
         }
     }
-
-    fun dpToPx(dp: Float): Int {
-        val density = Resources.getSystem().displayMetrics.density
-        return (dp * density).roundToInt()
-    }
-
-
-    fun getSimpleDialog(
-        context: Context, title: String, message: String
-    ): MaterialAlertDialogBuilder {
-        val builder = MaterialAlertDialogBuilder(context, R.style.MAlertDialogStyle)
-        builder.setTitle(title)
-            .setMessage(message)
-        return builder
-    }
-
 
     fun convertImage2ByteArray(bitmap: Bitmap): ByteArray? {
         val stream = ByteArrayOutputStream()
@@ -81,7 +52,19 @@ object Util {
         return stream.toByteArray()
     }
 
-    fun convertByteArray2Image(array: ByteArray): Bitmap? {
+    @Throws(IOException::class)
+    fun getBytes(inputStream: InputStream): ByteArray? {
+        val byteBuffer = ByteArrayOutputStream()
+        val bufferSize = 1024
+        val buffer = ByteArray(bufferSize)
+        var len = 0
+        while (inputStream.read(buffer).also { len = it } != -1) {
+            byteBuffer.write(buffer, 0, len)
+        }
+        return byteBuffer.toByteArray()
+    }
+
+    fun convertByteArrayToBitmap(array: ByteArray): Bitmap? {
         return BitmapFactory.decodeByteArray(array, 0, array.size)
     }
 
@@ -161,8 +144,42 @@ object Util {
         return "\u20B9 ${formatter.format(amount)}"
     }
 
-    fun prettyDateFormatter(timestamp: Timestamp){
+    @SuppressLint("SimpleDateFormat")
+    fun prettyDateFormatter(timestamp: Timestamp): String {
 
+        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val parsedDate =
+                LocalDateTime.ofInstant(timestamp.toDate().toInstant(), ZoneId.systemDefault())
+            parsedDate.format(DateTimeFormatter.ofPattern("EEE, MMM d, yyyy, h:mm a"))
+        } else {
+            val formatter = SimpleDateFormat("EEE, MMM d, yyyy, h:mm a")
+            formatter.format(timestamp.toDate())
+        }
+    }
+
+    fun getImageDestinationPath(userId: String, context: Context): Uri {
+        val root =
+            File(
+                context.externalCacheDir,
+                "profile"
+            )
+        root.mkdirs()
+        val sdImageMainDirectory = File(root, "profile_$userId.jpg")
+        return FileProvider.getUriForFile(
+            context,
+            context.packageName + ".provider",
+            sdImageMainDirectory
+        )
+    }
+
+
+    fun queryName(contentResolver: ContentResolver?, sourceUri: Uri): String {
+        val returnCursor: Cursor = contentResolver?.query(sourceUri, null, null, null, null)!!
+        val nameIndex: Int = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        returnCursor.moveToFirst()
+        val name: String = returnCursor.getString(nameIndex)
+        returnCursor.close()
+        return name
     }
 
 }

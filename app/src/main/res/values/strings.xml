@@ -54,6 +54,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="location_permission_rational">Location permission is required to run this app</string>
+    <string name="permission_rational">%1$S permission is required to run this app</string>
     <string name="welcome_back">Welcome back, %1$S!!</string>
     <string name="save">Save</string>
     <string name="about">About Us</string>
@@ -78,14 +79,25 @@
     <string name="card">Credit/Debit Card</string>
     <string name="add_card">Add Card</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="custom_month_year_separator">/</string>
-    <string name="only_add_separator">+</string>
-    <string name="first_month_and_separator_input_by_user">-</string>
     <string name="link">Link</string>
     <string name="check_balance">Check Balance</string>
     <string name="upi">UPI</string>
     <string name="add_credi_card">Add Card</string>
     <string name="refresh">Refresh</string>
+    <string name="lbl_set_profile_photo">Set Profile Picture</string>
+    <string name="lbl_take_camera_picture">Take from Camera</string>
+    <string name="lbl_choose_from_gallery">Choose from gallery</string>
+    <string name="app_settings">App Settings</string>
+    <string name="support">Support</string>
+    <string name="build_version">1.2.31</string>
+    <string name="getting_location">Getting Location …</string>
+    <string name="unable_to_share">Unable to share location</string>
+    <string name="share_via">Share via</string>
+    <string name="share_body">Here is my pathik location </string>
+    <string name="ask_again">Ask Again!!</string>
+    <string name="configure_permission_in_app_settings">%1$S permission is required, configure the permission in App Settings</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="updating_user_profile">Updating profile …</string>
+    <string name="pref_key_logout">pref_key_logout</string>
 
 </resources>

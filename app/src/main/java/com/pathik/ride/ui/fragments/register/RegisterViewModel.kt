@@ -24,12 +24,14 @@ constructor(
     fun register(user: User, password: String) = liveData(Dispatchers.IO) {
         emit(Resource.Loading)
         try {
-            val result = firebaseAuth.createUserWithEmailAndPassword(user.email!!, password).await()
-            user.userId = result?.user?.uid!!
-            user.createdAt = Timestamp.now()
-            user.updatedAt = Timestamp.now()
-            firebaseDataSource.setUserInfo(result.user?.uid!!, user.toMap)
-            UserPref.putString(UserPref.KEY_NAME, user.name!!)
+            val result = firebaseAuth.createUserWithEmailAndPassword(user.email, password).await()
+            user.apply {
+                userId = result?.user?.uid!!
+                createdAt = Timestamp.now()
+                updatedAt = Timestamp.now()
+            }
+            firebaseDataSource.setUserInfo(result.user?.uid!!, user.toMap())
+            UserPref.putString(UserPref.KEY_NAME, user.name)
             UserPref.putString(UserPref.KEY_EMAIL, user.email)
             emit(Resource.Success(user))
         } catch (e: Exception) {

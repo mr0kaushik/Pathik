@@ -61,6 +61,10 @@
         <item name="android:textSize">13sp</item>
     </style>
 
+    <style name="TextAppearance.Pathik.Body2.NavItem" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:textSize">36sp</item>
+    </style>
+
     <style name="TextAppearance.Pathik.Button" parent="TextAppearance.MaterialComponents.Button">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:fontFamily">@font/poppins</item>
@@ -78,6 +82,15 @@
         <item name="android:fontFamily">@font/poppins</item>
         <item name="android:textSize">10sp</item>
     </style>
+
+    <style name="TextAppearance.Pathik.Preference.Title.Light" parent="TextAppearance.Pathik.Body1">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextAppearance.Pathik.Preference.Summary.Light" parent="TextAppearance.Pathik.Body2">
+        <item name="android:textColor">@color/gray_78</item>
+    </style>
+
 
 
 </resources>

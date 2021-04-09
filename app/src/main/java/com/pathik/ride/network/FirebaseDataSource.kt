@@ -2,6 +2,7 @@ package com.pathik.ride.network
 
 import android.graphics.Bitmap
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.StorageReference
 import com.pathik.ride.model.CreditCard
 import com.pathik.ride.model.User
@@ -66,27 +67,35 @@ class FirebaseDataSource @Inject constructor(
         val user = firestore.collection(Constants.COLLECTION_USERS)
             .document(userId).get().await()
             .toUser()
-        UserPref.putString(UserPref.KEY_NAME, user.name!!)
-        UserPref.putString(UserPref.KEY_EMAIL, user.email!!)
-        UserPref.putString(UserPref.KEY_USER_PROFILE_URL, user.photoUrl!!)
+        UserPref.putString(UserPref.KEY_NAME, user.name)
+        UserPref.putString(UserPref.KEY_EMAIL, user.email)
+        UserPref.putString(UserPref.KEY_USER_PROFILE_URL, user.photoUrl)
         return Resource.Success(user)
     }
 
 
-    suspend fun setUserInfo(userId: String, map: HashMap<String, Any?>): Resource<Boolean> {
+    suspend fun setUserInfo(userId: String, map: HashMap<String, Any>): Resource<Boolean> {
         firestore.collection(Constants.COLLECTION_USERS)
             .document(userId)
-            .set(map)
+            .set(map, SetOptions.merge())
             .await()
         return Resource.Success(true)
     }
 
-    suspend fun uploadProfilePicture(userId: String, bitmap: Bitmap): Resource<Boolean> {
-        val profileReference = storageReference.child(Constants.PROFILES_STORAGE)
-            .child("$userId.png")
-        val it = profileReference.putBytes(Util.convertImage2ByteArray(bitmap)!!)
-        val task = profileReference.downloadUrl.await()
-        return setUserInfo(userId, hashMapOf("photoUrl" to task.path.toString()))
+    suspend fun setProfileWithData(
+        userId: String,
+        bitmap: Bitmap?,
+        data: HashMap<String, Any>
+    ): Resource<Boolean> {
+        if (bitmap != null) {
+            val profileReference = storageReference.child(Constants.PROFILES_STORAGE)
+                .child("$userId.png")
+            val it = profileReference.putBytes(Util.convertImage2ByteArray(bitmap)!!).await()
+            val task = profileReference.downloadUrl.await()
+
+            data["photoUrl"] = task.toString()
+        }
+        return setUserInfo(userId, data)
     }
 
 }

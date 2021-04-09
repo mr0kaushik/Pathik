@@ -1,26 +1,29 @@
 package com.pathik.ride.ui.activities
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.res.Resources
-import android.location.Location
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsets
-import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.app.ShareCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.updatePadding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -34,19 +37,20 @@ import com.mikhaellopez.circularimageview.CircularImageView
 import com.pathik.ride.R
 import com.pathik.ride.databinding.ActivityMainBinding
 import com.pathik.ride.databinding.ContentMainBinding
+import com.pathik.ride.network.Resource
+import com.pathik.ride.ui.activities.main.MapViewModel
 import com.pathik.ride.ui.activities.payment.PaymentActivity
 import com.pathik.ride.ui.activities.profile.ProfileActivity
 import com.pathik.ride.ui.activities.settings.SettingsActivity
 import com.pathik.ride.ui.activities.trip.TripActivity
-import com.pathik.ride.utils.PermissionUtil
-import com.pathik.ride.utils.UserPref
-import com.pathik.ride.utils.addSystemWindowInsetToMargin
-import com.pathik.ride.utils.addSystemWindowInsetToPadding
+import com.pathik.ride.utils.*
+import com.pathik.ride.utils.PermissionUtil.GPS_ENABLE_REQUEST_CODE
 import com.squareup.picasso.Picasso
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -62,90 +66,85 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     GoogleMap.OnCameraIdleListener,
     GoogleMap.OnCameraMoveStartedListener,
     GoogleMap.OnCameraMoveCanceledListener,
-    EasyPermissions.PermissionCallbacks {
+    EasyPermissions.PermissionCallbacks, OnMapReadyCallback, DrawerLayout.DrawerListener {
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var contentBinding: ContentMainBinding
-    private lateinit var headerView: View
 
     private lateinit var ivProfile: CircularImageView
-    private lateinit var tvName: TextView
-    private lateinit var tvEmail: TextView
+    private lateinit var tvName: AppCompatTextView
+    private lateinit var tvEmail: AppCompatTextView
 
     private lateinit var mMap: GoogleMap
     private var dragEnable: Boolean = true
 
-
+    private var pinLatLng: LatLng? = null
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
-    private lateinit var locationCallback: LocationCallback
-    private lateinit var locationRequest: LocationRequest
-    private var currentLocation: Location? = null
-
-    private var currentLatLng: LatLng? = null
+    private var doubleBackToExitPressedOnce = false
 
 
+    private val locationRequest: LocationRequest = LocationRequest.create().apply {
+        interval = TimeUnit.SECONDS.toMillis(60)
+        fastestInterval = TimeUnit.SECONDS.toMillis(30)
+        maxWaitTime = TimeUnit.MINUTES.toMillis(2)
+        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+
+    private val viewModel by viewModels<MapViewModel>()
+
+
+    @SuppressLint("VisibleForTests", "StringFormatInvalid")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        transparentStatusAndNavigation()
-        setTransparentStatusBarUI()
-//        Util.setTransparentWindow(window)
-
+        Util.setTransparentWindow(window)
 
         contentBinding = ContentMainBinding.bind(binding.root.getChildAt(0))
-        headerView = binding.navView.getHeaderView(0)
 
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult ?: return
-                for (location in locationResult.locations) {
-                    currentLatLng = LatLng(location.latitude, location.longitude)
-                }
-            }
-        }
 
-        locationRequest = LocationRequest.create().apply {
-            interval = TimeUnit.SECONDS.toMillis(60)
-            fastestInterval = TimeUnit.SECONDS.toMillis(30)
-            maxWaitTime = TimeUnit.MINUTES.toMillis(2)
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
+        binding.drawerLayout.addDrawerListener(this)
+
+
+        val headerView = binding.navView.getHeaderView(0)
+        ivProfile = headerView.findViewById(R.id.ivProfile)
+        tvName = headerView.findViewById(R.id.tvName)
+        tvEmail = headerView.findViewById(R.id.tvEmail)
+        binding.navView.setNavigationItemSelectedListener(this)
 
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.mapView) as SupportMapFragment
-        mapFragment.getMapAsync(callback)
+        mapFragment.getMapAsync(this)
 
-        ivProfile = headerView.findViewById(R.id.ivProfile)
-        tvName = headerView.findViewById(R.id.tvName)
-        tvEmail = headerView.findViewById(R.id.tvEmail)
-
-//        window.apply {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                statusBarColor = Color.TRANSPARENT
-//            }
-//        }
-
-        binding.navView.setNavigationItemSelectedListener(this)
+        fusedLocationProviderClient = FusedLocationProviderClient(this)
 
 
         contentBinding.btnDrawer.setOnClickListener {
-            openDrawer()
+            binding.drawerLayout.openDrawer(GravityCompat.START)
         }
 
         contentBinding.btnShare.setOnClickListener {
-            Timber.i("Btn Share")
+            val text = contentBinding.tvLocationInfo.text.toString()
+            if (text.isNotEmpty() && pinLatLng != null) {
+                val body =
+                    getString(R.string.share_body) +
+                            "http://maps.google.com/maps?saddr=${pinLatLng!!.latitude},${pinLatLng!!.longitude}"
+                startActivity(
+                    ShareCompat.IntentBuilder(this)
+                        .setType("text/plain")
+                        .setText(body)
+                        .setChooserTitle(R.string.share_via)
+                        .intent
+                )
+            } else {
+                contentBinding.root.snackbar(getString(R.string.unable_to_share))
+            }
         }
 
         contentBinding.btnMyLocation.setOnClickListener {
-            getMyLocation()
-            if (currentLatLng != null) {
-                animateCamera(currentLatLng!!)
-            }
+            enableMyLocation()
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -162,43 +161,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun setWindowFlag(context: Context, bit: Int, b: Boolean) {
-        val param = window.attributes
-        if (b) {
-            param.flags = param.flags or bit
-        } else {
-            param.flags = param.flags and (bit)
-        }
-        window.attributes = param
-    }
-
-    fun setTransparentStatusBarUI() {
-//        supportActionBar?.hide()
-//        window.apply {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                statusBarColor = Color.TRANSPARENT
-//                navigationBarColor = Color.TRANSPARENT
-//            }
-//        }
-        window?.run {
-            WindowCompat.setDecorFitsSystemWindows(this, false)
-        }
-//        if (Build.VERSION.SDK_INT in 19..20) {
-//            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true)
-//        }
-//        window.decorView.systemUiVisibility =
-//            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
-//            window.statusBarColor = Color.TRANSPARENT
-//        }
-
-    }
-
     override fun onResume() {
         super.onResume()
         tvName.text = UserPref.getString(UserPref.KEY_NAME)
@@ -212,24 +174,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    public fun openDrawer() {
-        binding.drawerLayout.openDrawer(GravityCompat.START)
-    }
-
-
-    override fun onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
+    override fun onMapReady(googleMap: GoogleMap?) {
+        mMap = googleMap ?: return
+        with(mMap) {
+            setOnCameraIdleListener(this@MainActivity)
+            setOnCameraMoveStartedListener(this@MainActivity)
+            setOnCameraMoveCanceledListener(this@MainActivity)
         }
-    }
+        setMapStyle(R.raw.map_style)
 
+        with(mMap.uiSettings) {
+            isMyLocationButtonEnabled = false
+            isZoomGesturesEnabled = true
+            isCompassEnabled = false
+            isMapToolbarEnabled = false
+            isZoomControlsEnabled = false
+        }
+        enableMyLocation()
+    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         binding.drawerLayout.closeDrawers()
-
-        Timber.i(item.title.toString())
         when (item.itemId) {
             R.id.menu_profile -> {
                 startActivity(Intent(this, ProfileActivity::class.java))
@@ -247,67 +212,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    private fun getMyLocation() {
-        if (PermissionUtil.hasLocationPermissions(this)) {
-            val locationEnabled = PermissionUtil.isLocationEnabled(this)
-            if (locationEnabled.first || locationEnabled.second) {
-                startLocationUpdates()
-            } else {
-                showGPSNotEnabledDialog(DialogType.GPS_ENABLE)
-            }
-        } else {
-            EasyPermissions.requestPermissions(
-                this,
-                PermissionUtil.getPermissionRequest(this)
-            )
-        }
-    }
-
-
-    @SuppressLint("MissingPermission")
-    private fun startLocationUpdates() {
-        fusedLocationProviderClient?.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper()
-        )
-    }
-
-    override fun onPause() {
-        super.onPause()
-        stopLocationUpdates()
-    }
-
-    private fun stopLocationUpdates() {
-        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
-    }
-
-    private val callback = OnMapReadyCallback { googleMap ->
-        mMap = googleMap ?: return@OnMapReadyCallback
-        with(mMap) {
-            setOnCameraIdleListener(this@MainActivity)
-            setOnCameraMoveStartedListener(this@MainActivity)
-            setOnCameraMoveCanceledListener(this@MainActivity)
-        }
-        setMapStyle(R.raw.map_style)
-        enableMyLocation()
-
-
-        with(mMap.uiSettings) {
-            isMyLocationButtonEnabled = false
-            isZoomGesturesEnabled = true
-        }
-    }
-
     @SuppressLint("MissingPermission")
     @AfterPermissionGranted(PermissionUtil.REQUEST_CODE_LOCATION_PERMISSION)
     private fun enableMyLocation() {
         if (PermissionUtil.hasLocationPermissions(this)) {
             mMap.isMyLocationEnabled = true
+            getCurrentLocation()
         } else {
             EasyPermissions.requestPermissions(
                 this,
-                PermissionUtil.getPermissionRequest(this)
+                PermissionUtil.getLocationPermissionRequest(this)
             )
         }
     }
@@ -323,19 +237,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        Timber.i("Requested Permission granted : ${perms.toString()}")
+        getCurrentLocation()
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
-        showGPSNotEnabledDialog(DialogType.PERMISSION_ENABLE)
+        if (EasyPermissions.permissionPermanentlyDenied(this, perms[0])) {
+            showDialog(DialogType.RATIONAL_PERMISSION_ENABLE)
+        } else {
+            showDialog(DialogType.PERMISSION_ENABLE)
+        }
     }
 
-    private fun moveCamera(latLng: LatLng) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-    }
 
-    private fun animateCamera(latLng: LatLng) {
-        val cameraPosition = CameraPosition.Builder().target(latLng).zoom(15.5f).build()
+    private fun animateCamera(latLng: LatLng, zoomVal: Float = 15.5f) {
+        val cameraPosition = CameraPosition.Builder().target(latLng).zoom(zoomVal).build()
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
@@ -351,11 +266,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Timber.e(e, "Style can't find");
             false
         }
-
     }
 
 
-    private fun showGPSNotEnabledDialog(dialogType: DialogType) {
+    private fun showDialog(dialogType: DialogType) {
         when (dialogType) {
             DialogType.GPS_ENABLE -> {
                 MaterialAlertDialogBuilder(this)
@@ -374,16 +288,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             DialogType.PERMISSION_ENABLE -> {
                 MaterialAlertDialogBuilder(this)
                     .setTitle(getString(R.string.permission_required))
-                    .setMessage(getString(R.string.location_permission_rational))
+                    .setMessage(getString(R.string.permission_rational, "Location"))
                     .setCancelable(true)
-                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                    .setPositiveButton(getString(R.string.ask_again)) { dialog, _ ->
                         dialog.dismiss()
                         EasyPermissions.requestPermissions(
                             this,
-                            PermissionUtil.getPermissionRequest(this)
+                            PermissionUtil.getLocationPermissionRequest(this)
                         )
                     }
-                    .setNegativeButton(R.string.no_thanks) { dialog, _ ->
+                    .setNegativeButton(R.string.cancel) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+            DialogType.RATIONAL_PERMISSION_ENABLE -> {
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.permission_required))
+                    .setMessage(
+                        getString(
+                            R.string.configure_permission_in_app_settings,
+                            "Location"
+                        )
+                    )
+                    .setCancelable(true)
+                    .setPositiveButton(getString(R.string.open_settings)) { dialog, _ ->
+                        dialog.dismiss()
+                        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", packageName, null)
+                        })
+                    }
+                    .setNegativeButton(R.string.cancel) { dialog, _ ->
                         dialog.dismiss()
                     }
                     .show()
@@ -394,77 +329,162 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCameraIdle() {
         if (dragEnable) {
-            contentBinding.ivLocationPicker.setImageResource(R.drawable.ic_marker)
+            contentBinding.ivLocationPicker.setImageResource(R.drawable.ic_location_icon)
+            setLocationAddress(mMap.cameraPosition.target)
         }
     }
 
     override fun onCameraMoveStarted(p: Int) {
         if (dragEnable) {
-            contentBinding.ivLocationPicker.setImageResource(R.drawable.ic_shadow_marker)
+            contentBinding.tvLocationInfo.text = getString(R.string.getting_location)
+            contentBinding.ivLocationPicker.setImageResource(R.drawable.ic_location_shadow)
         }
     }
 
     override fun onCameraMoveCanceled() {
         if (dragEnable) {
-            contentBinding.ivLocationPicker.setImageResource(R.drawable.ic_marker)
+            contentBinding.ivLocationPicker.setImageResource(R.drawable.ic_location_icon)
         }
-        Timber.i("onCameraMoveCanceled")
-
     }
 
-
-    /*
-    private fun openLocationSetting() {
-
-        val builder = LocationSettingsRequest.Builder()
-        builder.addLocationRequest(locationRequest)
-        val task: Task<LocationSettingsResponse> =
-            LocationServices.getSettingsClient(requireContext()).checkLocationSettings(builder.build())
-        task.addOnCompleteListener { task1 ->
-            try {
-                val response: LocationSettingsResponse = task1.getResult(ApiException::class.java)
-                Timber.i(response.toString())
-            } catch (exception: ApiException) {
-                when (exception.statusCode) {
-                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED ->                         // Location settings are not satisfied. But could be fixed by showing the
-                        // user a dialog.
-                        try {
-                            // Cast to a resolvable exception.
-                            val resolvable = exception as ResolvableApiException
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
-                            resolvable.startResolutionForResult(activity, GPS_ENABLE_REQUEST_CODE)
-                        } catch (e: SendIntentException) {
-                            e.printStackTrace()
-                        } catch (e: ClassCastException) {
-                            e.printStackTrace()
+    private fun getCurrentLocation() {
+        viewModel.getLocationRequestDialog(locationRequest)
+            .observe(this, {
+                when (it) {
+                    is Resource.Loading -> {
+                    }
+                    is Resource.Success -> {
+                        if (it.value.isLocationPresent) {
+                            getLastLocation()
                         }
-                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+                    }
+                    is Resource.Failure -> {
+                        if (it.exception is ApiException) {
+                            when (it.exception.statusCode) {
+                                LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
+                                    try {
+                                        val resolvable = it.exception as ResolvableApiException
+                                        resolvable.startResolutionForResult(
+                                            this,
+                                            GPS_ENABLE_REQUEST_CODE
+                                        )
+                                    } catch (e: IntentSender.SendIntentException) {
+                                        Timber.e(e)
+                                    } catch (e: ClassCastException) {
+                                        Timber.e(e)
+                                    }
+                                }
+                                LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+            })
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLastLocation() {
+        fusedLocationProviderClient?.let { client ->
+            viewModel.getLastLocation(client).observe(
+                this
+            ) {
+                when (it) {
+                    Resource.Loading -> {
+                    }
+                    is Resource.Success -> {
+                        val latLng = LatLng(it.value.latitude, it.value.longitude)
+                        pinLatLng = latLng
+                        animateCamera(latLng)
+                        setLocationAddress(LatLng(it.value.latitude, it.value.longitude))
+                    }
+                    is Resource.Failure -> {
+                        Timber.i("Current location not found!!")
                     }
                 }
             }
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val states = LocationSettingsStates.fromIntent(data)
-        when (requestCode) {
-            GPS_ENABLE_REQUEST_CODE -> when (resultCode) {
-                Activity.RESULT_OK -> getDeviceLocation()
-                Activity.RESULT_CANCELED -> showDialog(GPS_ENABLE_TYPE)
-                else -> {
+    private fun setLocationAddress(latLng: LatLng) {
+        viewModel.getAddressFromLatLng(latLng.latitude, latLng.longitude).observe(this) {
+            when (it) {
+                is Resource.Loading -> {
+                    contentBinding.progressBar.visible(true)
+                }
+                is Resource.Success -> {
+                    contentBinding.progressBar.visible(false)
+                    if (it.value.isEmpty()) {
+                        contentBinding.root.snackbar("Unable to get Location details")
+                    } else {
+                        contentBinding.tvLocationInfo.text = it.value
+                    }
+                }
+                is Resource.Failure -> {
+                    contentBinding.progressBar.visible(false)
+                    Timber.e(it.exception)
                 }
             }
         }
     }
-    */
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.forEach { fragment ->
-//            fragment.onActivityResult(requestCode, resultCode, data)
-//        }
-//    }
+
+    override fun onDrawerOpened(drawerView: View) {
+    }
+
+    override fun onDrawerClosed(drawerView: View) {
+    }
+
+    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+        setAppearanceLight(slideOffset < 0.5)
+    }
+
+    override fun onDrawerStateChanged(newState: Int) {
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.drawerLayout.removeDrawerListener(this)
+    }
 
 
+    private fun setAppearanceLight(set: Boolean) {
+        window?.let {
+            WindowCompat.getInsetsController(
+                window,
+                window.decorView
+            )?.isAppearanceLightStatusBars = set
+            WindowCompat.getInsetsController(
+                window,
+                window.decorView
+            )?.isAppearanceLightNavigationBars = set
+        }
+    }
+
+    override fun onBackPressed() {
+        Timber.i("OnBackPressed")
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            return
+        }
+
+        Timber.i("OnBackPressed 1")
+
+
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+        Timber.i("OnBackPressed 2")
+
+
+        this.doubleBackToExitPressedOnce = true
+        contentBinding.root.snackbar("Please click Back again to exit")
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            doubleBackToExitPressedOnce = false
+        }, 2000)
+    }
 }
+

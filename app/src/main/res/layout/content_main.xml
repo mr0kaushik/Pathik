@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
-    android:clipToPadding="false"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipToPadding="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -61,15 +62,19 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLocationInfo"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:ellipsize="end"
-                    android:maxLines="1"
+                    android:gravity="center|start"
+                    android:maxLines="2"
                     android:paddingHorizontal="8dp"
+                    android:textAppearance="@style/TextAppearance.Pathik.Subtitle2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/btnShare"
                     app:layout_constraintStart_toEndOf="@id/btnDrawer"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Current Location" />
 
                 <FrameLayout
                     android:id="@+id/frameLayout"
@@ -79,7 +84,17 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
 
-                    <ProgressBar
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/progressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="-6dp"
+                        android:layout_marginEnd="-6dp"
+                        android:layout_marginBottom="-4dp"
+                        android:indeterminate="true"
+                        android:visibility="invisible" />
+                    <!--<ProgressBar
                         android:id="@+id/progressBar"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="match_parent"
@@ -90,7 +105,7 @@
                         android:layout_marginBottom="-4dp"
                         android:indeterminate="true"
                         android:progressDrawable="@drawable/progress_drawable"
-                        android:visibility="invisible" />
+                        android:visibility="invisible" />-->
 
                 </FrameLayout>
 
@@ -113,7 +128,8 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_location_pin" />
+                android:paddingBottom="4dp"
+                android:src="@drawable/ic_location_icon" />
 
 
         </FrameLayout>
@@ -128,9 +144,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="@string/fab_content_desc"
-        app:backgroundTint="@color/white_smoke"
-        app:fabSize="mini"
-        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        android:tint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_my_location" />
 
 
