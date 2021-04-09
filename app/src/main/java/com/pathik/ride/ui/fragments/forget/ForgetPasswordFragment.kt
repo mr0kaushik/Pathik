@@ -97,7 +97,7 @@ class ForgetPasswordFragment : Fragment(R.layout.fragment_forget_password) {
             .toString()
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.tilEmail.error = "Enter valid email address"
+            binding.tilEmail.error = getString(R.string.enter_valid_email_address)
             return false
         }
 

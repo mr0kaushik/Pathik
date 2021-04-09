@@ -150,23 +150,6 @@
         <item name="colorOnSurface">@color/black_ebony</item>
     </style>
 
-    <style name="Theme.Pathik.Preferences">
-        <item name="preferenceCategoryTitleTextAppearance">@style/TextAppearance.Pathik.Subtitle1
-        </item>
-        <item name="colorAccent">@color/white_smoke</item>
-        <item name="subtitleTextColor">@color/gray_78</item>
-        <item name="android:textColorSecondary">@color/gray_78</item>
-        <item name="android:textAppearanceLarge">
-            @style/TextAppearance.Pathik.Preference.Title.Light
-        </item>
-        <item name="android:textAppearanceSmall">
-            @style/TextAppearance.Pathik.Preference.Summary.Light
-        </item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textAppearance">@style/TextAppearance.Pathik.Body1</item>
-
-    </style>
-
     <style name="ActivityTransitionAnimation">
         <item name="android:activityOpenEnterAnimation">@anim/nav_default_enter_anim</item>
         <item name="android:activityOpenExitAnimation">@anim/nav_default_exit_anim</item>

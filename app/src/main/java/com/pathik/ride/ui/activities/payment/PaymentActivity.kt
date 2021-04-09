@@ -3,8 +3,6 @@ package com.pathik.ride.ui.activities.payment
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.pathik.ride.R
@@ -18,8 +16,6 @@ import com.pathik.ride.ui.adapter.WalletAdapter
 import com.pathik.ride.utils.snackbar
 import com.pathik.ride.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
-import java.util.*
 
 @AndroidEntryPoint
 class PaymentActivity : AppCompatActivity() {

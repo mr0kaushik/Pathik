@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.pathik.ride.R
 import com.pathik.ride.databinding.ActivityAuthBinding
+import com.pathik.ride.ui.activities.main.MainActivity
 import com.pathik.ride.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,10 +34,9 @@ class AuthActivity : AppCompatActivity() {
             super.onBackPressed()
             return
         }
-
         this.doubleBackToExitPressedOnce = true
-        binding.root.snackbar("Please click Back again to exit")
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+        binding.root.snackbar(getString(R.string.click_again_to_exit))
+        Handler(Looper.getMainLooper()).postDelayed({
             doubleBackToExitPressedOnce = false
         }, 2000)
     }

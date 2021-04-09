@@ -1,4 +1,4 @@
-package com.pathik.ride.ui.activities
+package com.pathik.ride.ui.activities.main
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -38,7 +38,6 @@ import com.pathik.ride.R
 import com.pathik.ride.databinding.ActivityMainBinding
 import com.pathik.ride.databinding.ContentMainBinding
 import com.pathik.ride.network.Resource
-import com.pathik.ride.ui.activities.main.MapViewModel
 import com.pathik.ride.ui.activities.payment.PaymentActivity
 import com.pathik.ride.ui.activities.profile.ProfileActivity
 import com.pathik.ride.ui.activities.settings.SettingsActivity
@@ -50,16 +49,12 @@ import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import java.util.*
 import java.util.concurrent.TimeUnit
 
-
 enum class DialogType {
-    GPS_ENABLE,
     PERMISSION_ENABLE,
     RATIONAL_PERMISSION_ENABLE
 }
-
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -76,7 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var tvEmail: AppCompatTextView
 
     private lateinit var mMap: GoogleMap
-    private var dragEnable: Boolean = true
+    private var dragEnable: Boolean = false
 
     private var pinLatLng: LatLng? = null
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
@@ -130,7 +125,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (text.isNotEmpty() && pinLatLng != null) {
                 val body =
                     getString(R.string.share_body) +
-                            "http://maps.google.com/maps?saddr=${pinLatLng!!.latitude},${pinLatLng!!.longitude}"
+                            " http://maps.google.com/maps?saddr=${pinLatLng!!.latitude},${pinLatLng!!.longitude}"
                 startActivity(
                     ShareCompat.IntentBuilder(this)
                         .setType("text/plain")
@@ -176,12 +171,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap ?: return
+        dragEnable = true
         with(mMap) {
             setOnCameraIdleListener(this@MainActivity)
             setOnCameraMoveStartedListener(this@MainActivity)
             setOnCameraMoveCanceledListener(this@MainActivity)
         }
-        setMapStyle(R.raw.map_style)
+        setMapStyle()
 
         with(mMap.uiSettings) {
             isMyLocationButtonEnabled = false
@@ -254,16 +250,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
-    private fun setMapStyle(resId: Int): Boolean {
+    private fun setMapStyle(): Boolean {
         return try {
             val success =
-                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, resId));
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
             if (success) {
-                Timber.i("Map Style parsed Successfully");
+                Timber.i("Map Style parsed Successfully")
             }
             success
         } catch (e: Resources.NotFoundException) {
-            Timber.e(e, "Style can't find");
+            Timber.e(e, "Style can't find")
             false
         }
     }
@@ -271,20 +267,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun showDialog(dialogType: DialogType) {
         when (dialogType) {
-            DialogType.GPS_ENABLE -> {
-                MaterialAlertDialogBuilder(this)
-                    .setTitle(getString(R.string.enable_gps))
-                    .setMessage(getString(R.string.required_for_this_app))
-                    .setCancelable(true)
-                    .setPositiveButton(getString(R.string.enable_now)) { dialog, _ ->
-                        dialog.dismiss()
-                        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                    }
-                    .setNegativeButton(R.string.cancel) { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
-            }
             DialogType.PERMISSION_ENABLE -> {
                 MaterialAlertDialogBuilder(this)
                     .setTitle(getString(R.string.permission_required))
@@ -418,7 +400,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 is Resource.Success -> {
                     contentBinding.progressBar.visible(false)
                     if (it.value.isEmpty()) {
-                        contentBinding.root.snackbar("Unable to get Location details")
+                        Timber.i("Location not found ${latLng.latitude},${latLng.longitude}")
+//                        contentBinding.root.snackbar("Unable to get Location details")
                     } else {
                         contentBinding.tvLocationInfo.text = it.value
                     }
@@ -464,25 +447,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
-        Timber.i("OnBackPressed")
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             return
         }
 
-        Timber.i("OnBackPressed 1")
-
-
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed()
             return
         }
-        Timber.i("OnBackPressed 2")
-
 
         this.doubleBackToExitPressedOnce = true
-        contentBinding.root.snackbar("Please click Back again to exit")
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+        contentBinding.root.snackbar(getString(R.string.click_again_to_exit))
+        Handler(Looper.getMainLooper()).postDelayed({
             doubleBackToExitPressedOnce = false
         }, 2000)
     }

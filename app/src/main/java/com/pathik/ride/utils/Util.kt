@@ -5,9 +5,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.view.Window
 import androidx.core.content.FileProvider
@@ -18,12 +16,9 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FirebaseFirestoreException
-import com.pathik.ride.BuildConfig
 import com.pathik.ride.R
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.IOException
-import java.io.InputStream
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -32,13 +27,6 @@ import java.time.format.DateTimeFormatter
 
 
 object Util {
-    const val PERMISSIONS_REQUEST_CAMERA = 1
-    const val PERMISSIONS_REQUEST_READ_STORAGE = 2
-    const val PERMISSIONS_REQUEST_READ_CONTACTS = 3
-    const val REQUEST_GALLERY_IMAGE = 4
-    const val REQUEST_IMAGE_CAPTURE = 5
-    const val REQUEST_CODE_VERIFY_EMAIL = 102
-
 
     fun setTransparentWindow(window: Window?) {
         window?.run {
@@ -52,38 +40,37 @@ object Util {
         return stream.toByteArray()
     }
 
-    @Throws(IOException::class)
-    fun getBytes(inputStream: InputStream): ByteArray? {
-        val byteBuffer = ByteArrayOutputStream()
-        val bufferSize = 1024
-        val buffer = ByteArray(bufferSize)
-        var len = 0
-        while (inputStream.read(buffer).also { len = it } != -1) {
-            byteBuffer.write(buffer, 0, len)
-        }
-        return byteBuffer.toByteArray()
-    }
+//    @Throws(IOException::class)
+//    fun getBytes(inputStream: InputStream): ByteArray? {
+//        val byteBuffer = ByteArrayOutputStream()
+//        val bufferSize = 1024
+//        val buffer = ByteArray(bufferSize)
+//        var len = 0
+//        while (inputStream.read(buffer).also { len = it } != -1) {
+//            byteBuffer.write(buffer, 0, len)
+//        }
+//        return byteBuffer.toByteArray()
+//    }
+//
+//    fun convertByteArrayToBitmap(array: ByteArray): Bitmap? {
+//        return BitmapFactory.decodeByteArray(array, 0, array.size)
+//    }
 
-    fun convertByteArrayToBitmap(array: ByteArray): Bitmap? {
-        return BitmapFactory.decodeByteArray(array, 0, array.size)
-    }
-
-    fun getRealPathFromURI(contentURI: Uri, context: Context): String? {
-        val result: String?
-        val cursor = context.contentResolver.query(contentURI, null, null, null, null)
-        if (cursor == null) { // Source is Dropbox or other similar local file path
-            result = contentURI.path
-        } else {
-            cursor.moveToFirst()
-            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-            result = cursor.getString(idx)
-            cursor.close()
-        }
-        return result
-    }
+//    fun getRealPathFromURI(contentURI: Uri, context: Context): String? {
+//        val result: String?
+//        val cursor = context.contentResolver.query(contentURI, null, null, null, null)
+//        if (cursor == null) { // Source is Dropbox or other similar local file path
+//            result = contentURI.path
+//        } else {
+//            cursor.moveToFirst()
+//            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+//            result = cursor.getString(idx)
+//            cursor.close()
+//        }
+//        return result
+//    }
 
     fun getSimpleErrorResourceId(e: FirebaseException): Int {
-
         return when (e) {
             is FirebaseAuthException -> {
                 when (e.errorCode) {
@@ -126,14 +113,13 @@ object Util {
                 R.string.error_network_exception
             }
             is FirebaseFirestoreException -> {
-                R.string.please_try_again_later
+                R.string.an_error_occur
             }
             is FirebaseTooManyRequestsException -> {
-                R.string.please_try_again_later
+                R.string.an_error_occur
             }
             else -> {
                 R.string.an_error_occur
-
             }
         }
 
@@ -146,7 +132,6 @@ object Util {
 
     @SuppressLint("SimpleDateFormat")
     fun prettyDateFormatter(timestamp: Timestamp): String {
-
         return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val parsedDate =
                 LocalDateTime.ofInstant(timestamp.toDate().toInstant(), ZoneId.systemDefault())
@@ -173,6 +158,7 @@ object Util {
     }
 
 
+    @SuppressLint("Recycle")
     fun queryName(contentResolver: ContentResolver?, sourceUri: Uri): String {
         val returnCursor: Cursor = contentResolver?.query(sourceUri, null, null, null, null)!!
         val nameIndex: Int = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)

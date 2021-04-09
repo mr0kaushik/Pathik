@@ -8,7 +8,6 @@
         <item name="iconGravity">textStart</item>
         <item name="android:gravity">center</item>
         <item name="background">?attr/selectableItemBackgroundBorderless</item>
-        <!--        <item name="rippleColor"></item>-->
     </style>
 
     <style name="Style.Pathik.Primary.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -43,10 +42,6 @@
     <!--        <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button</item>-->
     <!--    </style>-->
 
-    <style name="MaterialAlertDialog.App.Title.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
-        <item name="android:textColor">@color/white_smoke</item>
-    </style>
-
     <style name="MAlertDialogStyle" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="colorSurface">@color/black_ebony</item>
         <item name="colorOnSurface">@color/white</item>
@@ -75,10 +70,5 @@
         <item name="android:paddingEnd">4dp</item>
     </style>
 
-
-    <style name="Style.Pathik.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textAppearance">@style/TextAppearance.Pathik.Button</item>
-        <item name="android:textColor">@color/white_smoke</item>
-    </style>
 
 </resources>

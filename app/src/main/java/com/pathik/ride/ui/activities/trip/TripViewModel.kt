@@ -2,10 +2,8 @@ package com.pathik.ride.ui.activities.trip
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.pathik.ride.model.DataSource
-import com.pathik.ride.model.Trip
 import com.pathik.ride.network.FirebaseDataSource
 import com.pathik.ride.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,25 +19,25 @@ constructor(
 ) : ViewModel() {
 
 
-    fun getMyTrips(userId: String) =
-        liveData(Dispatchers.IO) {
-            emit(Resource.Loading)
-            try {
-                val trips = firebaseFirebaseDataSource.getMyTrips(firebaseAuth.currentUser?.uid!!)
-                emit(trips)
-            } catch (e: Exception) {
-                emit(Resource.Failure(e))
-            }
-        }
+//    fun getMyTrips(userId: String) =
+//        liveData(Dispatchers.IO) {
+//            emit(Resource.Loading)
+//            try {
+//                val trips = firebaseFirebaseDataSource.getMyTrips(firebaseAuth.currentUser?.uid!!)
+//                emit(trips)
+//            } catch (e: Exception) {
+//                emit(Resource.Failure(e))
+//            }
+//        }
 
     fun getLocalTrips() = liveData(Dispatchers.IO) {
         emit(Resource.Loading)
 
-        try{
+        try {
             Thread.sleep(2000)
             val mutableList = DataSource.listOfTrips
             emit(Resource.Success(mutableList))
-        } catch (e: Exception){
+        } catch (e: Exception) {
             emit(Resource.Failure(e))
         }
     }

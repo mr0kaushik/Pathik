@@ -8,12 +8,11 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.google.firebase.FirebaseException
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuthException
 import com.pathik.ride.R
 import com.pathik.ride.databinding.FragmentRegisterBinding
 import com.pathik.ride.model.User
@@ -67,7 +66,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private fun register(user: User) {
         viewModel.register(user, binding.etPassword.text.toString())
-            .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, {
                 when (it) {
                     is Resource.Loading -> {
                         lifecycleScope.launch {
@@ -78,8 +77,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     is Resource.Success -> {
                         lifecycleScope.launch {
                             progressDialog?.dismiss()
-                            Timber.i("User Logged In")
-                            binding.root.snackbar("Successfully Registered !!")
+                            binding.root.snackbar(getString(R.string.successfully_registerd))
                             navController.navigate(RegisterFragmentDirections.actionRegisterFragmentToMainActivity())
                             requireActivity().finishAffinity()
                         }
@@ -88,10 +86,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         lifecycleScope.launch {
                             progressDialog?.dismiss()
                             Timber.e(it.exception)
-                            if (it.exception is FirebaseAuthException) {
+                            if (it.exception is FirebaseException) {
                                 binding.root.snackbar(getString(Util.getSimpleErrorResourceId(it.exception)))
                             } else {
-                                binding.root.snackbar("An error occurred !!")
+                                binding.root.snackbar(getString(R.string.common_auth_error))
                             }
                         }
                     }
@@ -124,7 +122,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 .toString()
                 .trim()
 
-            resetErrors();
+            resetErrors()
             binding.btnRegister.isEnabled = name.isNotEmpty()
                     && phone.isNotEmpty()
                     && email.isNotEmpty()
@@ -143,7 +141,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             .toString()
 
         if (!Patterns.PHONE.matcher(phone).matches() || phone.length != 10) {
-            binding.tilPhoneNumber.error = "Enter valid phone number"
+            binding.tilPhoneNumber.error = getString(R.string.enter_valid) + "phone number"
             return null
         }
 
@@ -152,7 +150,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             .toString()
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.tilEmail.error = "Enter valid email address"
+            binding.tilEmail.error = getString(R.string.enter_valid) + "email address"
             return null
         }
 
@@ -165,12 +163,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             .toString()
 
         if (password != confirmPassword) {
-            binding.tilConfirmPassword.error = "Password do not matches"
+            binding.tilConfirmPassword.error = getString(R.string.password_not_matched)
             return null
         }
 
-
-        return User(name = name, createdAt = Timestamp.now(), email = email, phoneNumber = phone);
+        return User(name = name, createdAt = Timestamp.now(), email = email, phoneNumber = phone)
     }
 
     private fun resetErrors() {

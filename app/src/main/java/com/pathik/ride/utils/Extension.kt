@@ -56,71 +56,29 @@ fun Context.getProgressDialog(titleResId: Int): MaterialAlertDialogBuilder {
 }
 
 
-fun Activity.transparentStatusAndNavigation(
-    systemUiScrim: Int = Color.parseColor("#40000000") // 25% black
-) {
-    var systemUiVisibility = 0
-    // Use a dark scrim by default since light status is API 23+
-    var statusBarColor = systemUiScrim
-    //  Use a dark scrim by default since light nav bar is API 27+
-    var navigationBarColor = systemUiScrim
-    val winParams = window.attributes
 
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        statusBarColor = Color.TRANSPARENT
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        navigationBarColor = Color.TRANSPARENT
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        systemUiVisibility = systemUiVisibility or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        window.decorView.systemUiVisibility = systemUiVisibility
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-        winParams.flags = winParams.flags or
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        winParams.flags = winParams.flags and
-                (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION).inv()
-        window.statusBarColor = statusBarColor
-        window.navigationBarColor = navigationBarColor
-    }
-
-    window.attributes = winParams
-}
-
-
-fun View.addSystemWindowInsetToPadding(
-    left: Boolean = false,
-    top: Boolean = false,
-    right: Boolean = false,
-    bottom: Boolean = false
-) {
-    val (initialLeft, initialTop, initialRight, initialBottom) =
-        listOf(paddingLeft, paddingTop, paddingRight, paddingBottom)
-
-    ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
-        view.updatePadding(
-            left = initialLeft + (if (left) insets.systemWindowInsetLeft else 0),
-            top = initialTop + (if (top) insets.systemWindowInsetTop else 0),
-            right = initialRight + (if (right) insets.systemWindowInsetRight else 0),
-            bottom = initialBottom + (if (bottom) insets.systemWindowInsetBottom else 0)
-        )
-
-        insets
-    }
-
-//    WindowInsetsCompat.Type.ime().
-}
+//fun View.addSystemWindowInsetToPadding(
+//    left: Boolean = false,
+//    top: Boolean = false,
+//    right: Boolean = false,
+//    bottom: Boolean = false
+//) {
+//    val (initialLeft, initialTop, initialRight, initialBottom) =
+//        listOf(paddingLeft, paddingTop, paddingRight, paddingBottom)
+//
+//    ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+//        view.updatePadding(
+//            left = initialLeft + (if (left) insets.systemWindowInsetLeft else 0),
+//            top = initialTop + (if (top) insets.systemWindowInsetTop else 0),
+//            right = initialRight + (if (right) insets.systemWindowInsetRight else 0),
+//            bottom = initialBottom + (if (bottom) insets.systemWindowInsetBottom else 0)
+//        )
+//
+//        insets
+//    }
+//
+////    WindowInsetsCompat.Type.ime().
+//}
 
 fun View.addSystemWindowInsetToMargin(
     left: Boolean = false,

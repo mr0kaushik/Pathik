@@ -11,7 +11,6 @@ import com.pathik.ride.ui.activities.AuthActivity
 import com.pathik.ride.ui.fragments.login.LoginViewModel
 import com.pathik.ride.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -23,9 +22,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             preferenceScreen.findPreference<Preference>(getString(R.string.pref_key_logout))
 
         preference?.onPreferenceClickListener =
-            Preference.OnPreferenceClickListener { //
-                // handle click here
-                Timber.i(preference.toString())
+            Preference.OnPreferenceClickListener {
                 viewModel.logout().observe(this) {
                     when (it) {
                         is Resource.Success -> {

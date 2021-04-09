@@ -3,7 +3,6 @@ package com.pathik.ride.ui.activities.profile
 import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -18,7 +17,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -40,7 +38,7 @@ import java.io.File
 
 enum class DialogType {
     CAMERA_PERMISSION_RATIONALE,
-    GALLERY_PERMISSION_RATIONALE
+//    GALLERY_PERMISSION_RATIONALE
 }
 
 @AndroidEntryPoint
@@ -52,7 +50,6 @@ class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
     private val viewModel by viewModels<ProfileViewModel>()
 
     private lateinit var user: User
-    private var bitmap: Bitmap? = null
     private var destinationUri: Uri? = null
 
     private var progressDialog: AlertDialog? = null
@@ -107,7 +104,7 @@ class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
 
     private fun refreshList(fromSwipe: Boolean) {
         viewModel.fetchUserData().observe(this,
-            Observer {
+            {
                 when (it) {
                     Resource.Loading -> {
                         if (!fromSwipe) binding.swipeRefreshLayout.isRefreshing = true
@@ -208,7 +205,7 @@ class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
                 .toString()
                 .trim()
 
-            resetErrors();
+            resetErrors()
             btnDone.isEnabled = name.isNotEmpty()
                     && phone.isNotEmpty()
         }
@@ -283,17 +280,19 @@ class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
         if (requestCode == PermissionUtil.REQUEST_CAMERA_CODE) {
             takePicture()
-        } else if (requestCode == PermissionUtil.READ_EXTERNAL_STORAGE_CODE) {
-            pickImages.launch("image/*")
         }
+//        } else if (requestCode == PermissionUtil.READ_EXTERNAL_STORAGE_CODE) {
+//            pickImages.launch("image/*")
+//        }
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
         if (requestCode == PermissionUtil.REQUEST_CAMERA_CODE) {
             getDialog(DialogType.CAMERA_PERMISSION_RATIONALE)
-        } else if (requestCode == PermissionUtil.READ_EXTERNAL_STORAGE_CODE) {
-            getDialog(DialogType.GALLERY_PERMISSION_RATIONALE)
         }
+//        else if (requestCode == PermissionUtil.READ_EXTERNAL_STORAGE_CODE) {
+//            getDialog(DialogType.GALLERY_PERMISSION_RATIONALE)
+//        }
     }
 
 
@@ -361,7 +360,12 @@ class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
             .setCancelable(true)
         when (dialogType) {
             DialogType.CAMERA_PERMISSION_RATIONALE -> {
-                builder.setMessage("Camera permission is required, configure changes in settings")
+                builder.setMessage(
+                    getString(
+                        R.string.configure_permission_in_app_settings,
+                        "Camera"
+                    )
+                )
                     .setPositiveButton(R.string.open_settings) { dialog, _ ->
                         dialog.dismiss()
                         startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
@@ -373,183 +377,24 @@ class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
                     }
                     .show()
             }
-            DialogType.GALLERY_PERMISSION_RATIONALE -> {
-                builder.setMessage("Storage permission is required, configure changes in settings")
-                    .setPositiveButton(R.string.open_settings) { dialog, _ ->
-                        dialog.dismiss()
-                        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.fromParts("package", packageName, null)
-                        })
-                    }
-                    .setNegativeButton(R.string.cancel) { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
-            }
+//            DialogType.GALLERY_PERMISSION_RATIONALE -> {
+//                builder.setMessage(
+//                    getString(
+//                        R.string.configure_permission_in_app_settings,
+//                        "Storage"
+//                    )
+//                )
+//                    .setPositiveButton(R.string.open_settings) { dialog, _ ->
+//                        dialog.dismiss()
+//                        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+//                            data = Uri.fromParts("package", packageName, null)
+//                        })
+//                    }
+//                    .setNegativeButton(R.string.cancel) { dialog, _ ->
+//                        dialog.dismiss()
+//                    }
+//                    .show()
+//            }
         }
     }
-
-
-//
-//    private fun getRuntimePermission(type: Int) {
-//        when (type) {
-//            com.tech.excessrewards.screens.EditProfile.PERMISSIONS_REQUEST_CAMERA -> if (ContextCompat.checkSelfPermission(
-//                    this@EditProfile,
-//                    Manifest.permission.CAMERA
-//                )
-//                != PackageManager.PERMISSION_GRANTED
-//            ) {
-//                ActivityCompat.requestPermissions(
-//                    this, arrayOf(Manifest.permission.CAMERA),
-//                    com.tech.excessrewards.screens.EditProfile.PERMISSIONS_REQUEST_CAMERA
-//                )
-//            } else {
-//                launchCameraIntent()
-//            }
-//            com.tech.excessrewards.screens.EditProfile.PERMISSIONS_REQUEST_READ_STORAGE -> if (ContextCompat.checkSelfPermission(
-//                    this@EditProfile,
-//                    Manifest.permission.READ_EXTERNAL_STORAGE
-//                )
-//                != PackageManager.PERMISSION_GRANTED
-//            ) {
-//                ActivityCompat.requestPermissions(
-//                    this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-//                    com.tech.excessrewards.screens.EditProfile.PERMISSIONS_REQUEST_READ_STORAGE
-//                )
-//            } else {
-//                launchGalleryIntent()
-//            }
-//        }
-//    }
-//
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<String?>,
-//        grantResults: IntArray
-//    ) {
-//        when (requestCode) {
-//            com.tech.excessrewards.screens.EditProfile.PERMISSIONS_REQUEST_CAMERA -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                launchCameraIntent()
-//            } else {
-//                showSettingsDialog(com.tech.excessrewards.screens.EditProfile.PERMISSIONS_REQUEST_CAMERA)
-//            }
-//            com.tech.excessrewards.screens.EditProfile.PERMISSIONS_REQUEST_READ_STORAGE -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                launchGalleryIntent()
-//            } else {
-//                showSettingsDialog(com.tech.excessrewards.screens.EditProfile.PERMISSIONS_REQUEST_READ_STORAGE)
-//            }
-//            com.tech.excessrewards.screens.EditProfile.REQUEST_GALLERY_IMAGE -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                launchGalleryIntent()
-//            } else {
-//                showSettingsDialog(com.tech.excessrewards.screens.EditProfile.REQUEST_GALLERY_IMAGE)
-//            }
-//        }
-//    }
-//
-//
-//    private fun launchCameraIntent() {
-//        val fileName = System.currentTimeMillis().toString() + ".jpg"
-//        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//        takePictureIntent.putExtra(
-//            MediaStore.EXTRA_OUTPUT,
-//            HelperClass.getCacheImagePath(this, fileName)
-//        )
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//            registerForActivityResult()
-//            startActivityForResult(
-//                takePictureIntent,
-//                com.tech.excessrewards.screens.EditProfile.REQUEST_IMAGE_CAPTURE
-//            )
-//        }
-//    }
-//
-//    private fun launchGalleryIntent() {
-//        val bundle = Bundle()
-//        bundle.putString(FAnalyticsConstant.Param.PROFILE_SELECTION_TYPE, "gallery")
-//        mAnalytics.logEvent(FAnalyticsConstant.Event.EDIT_SCREEN, bundle)
-//        val pickPhoto = Intent(
-//            Intent.ACTION_PICK,
-//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-//        )
-//        startActivityForResult(
-//            pickPhoto,
-//            com.tech.excessrewards.screens.EditProfile.REQUEST_GALLERY_IMAGE
-//        )
-//    }
-//
-//
-//    private fun cropImage(sourceUri: Uri?, type: Int) {
-//        val destinationUri = Uri.fromFile(
-//            File(
-//                getCacheDir(),
-//                HelperClass.queryName(getContentResolver(), sourceUri)
-//            )
-//        )
-//        val options = UCrop.Options()
-//        options.setCompressionQuality(80) //IMAGE_COMPRESSION = 80;
-//        options.withAspectRatio(1f, 1f) //16:9, 3:4, 1:1
-//        if (type == com.tech.excessrewards.screens.EditProfile.REQUEST_IMAGE_CAPTURE) {
-//            options.withMaxResultSize(1000, 1000)
-//        }
-//        UCrop.of(sourceUri!!, destinationUri)
-//            .withOptions(options)
-//            .start(this)
-//    }
-//
-//    private fun onRemovePictureSelected() {
-//        //TODO REMOVE USER PROFILE PIC (PHASE 2)
-//    }
-//
-//
-//    protected override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        when (requestCode) {
-//            com.tech.excessrewards.screens.EditProfile.REQUEST_CODE_VERIFY_EMAIL -> if (resultCode == RESULT_OK && data != null) {
-//                val accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-//                Log.d(
-//                    com.tech.excessrewards.screens.EditProfile.TAG,
-//                    "onActivityResult: Email ID : $accountName"
-//                )
-//                showSnackBar("$accountName: selected!", Snackbar.LENGTH_SHORT)
-//            }
-//            com.tech.excessrewards.screens.EditProfile.REQUEST_GALLERY_IMAGE -> if (resultCode == RESULT_OK && data != null) {
-//                val imageUri = data.data
-//                //                    ciProfileImage.setImageURI(imageUri);
-//                cropImage(
-//                    imageUri,
-//                    com.tech.excessrewards.screens.EditProfile.REQUEST_GALLERY_IMAGE
-//                )
-//            }
-//            com.tech.excessrewards.screens.EditProfile.REQUEST_IMAGE_CAPTURE -> if (resultCode == RESULT_OK) {
-////                    ciProfileImage.setImageURI(HelperClass.getCacheImagePath(getApplicationContext(), fileName));
-//                cropImage(
-//                    HelperClass.getCacheImagePath(getApplicationContext(), fileName),
-//                    com.tech.excessrewards.screens.EditProfile.REQUEST_IMAGE_CAPTURE
-//                )
-//            }
-//            UCrop.REQUEST_CROP -> if (resultCode == RESULT_OK && data != null) {
-//                val uri = UCrop.getOutput(data)
-//                //                    ciProfileImage.setImageURI(uri);
-//                if (uri != null && uri.path != null) {
-//                    loadImg(uri)
-//                }
-//            }
-//            UCrop.RESULT_ERROR -> if (data != null) {
-//                val cropError = UCrop.getError(data)
-//                Log.e(
-//                    com.tech.excessrewards.screens.EditProfile.TAG,
-//                    "Crop error: $cropError"
-//                )
-//            }
-//        }
-//
-//        /*
-//         * uncomment, Contact Permission Transaction
-//         * Remove Comment to Use Functionality, also move the code before super()
-//         */
-//        /* comment start
-//            callbackManager.onActivityResult(requestCode, resultCode, data);
-//        comment end */
-//    }
-
 }

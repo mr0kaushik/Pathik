@@ -20,7 +20,7 @@
 //import com.google.android.material.dialog.MaterialAlertDialogBuilder
 //import com.pathik.ride.R
 //import com.pathik.ride.databinding.FragmentMapsBinding
-//import com.pathik.ride.ui.activities.MainActivity
+//import com.pathik.ride.ui.activities.main.MainActivity
 //import com.pathik.ride.utils.PermissionUtil
 //import com.pathik.ride.utils.PermissionUtil.REQUEST_CODE_LOCATION_PERMISSION
 //import com.vmadalin.easypermissions.EasyPermissions

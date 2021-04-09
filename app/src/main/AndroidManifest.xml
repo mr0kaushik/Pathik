@@ -42,7 +42,7 @@
         </activity>
 
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".ui.activities.main.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.Pathik.MainActivity" />
         <activity

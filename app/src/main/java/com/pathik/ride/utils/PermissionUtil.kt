@@ -13,7 +13,6 @@ object PermissionUtil {
     const val REQUEST_CODE_LOCATION_PERMISSION = 100
     const val GPS_ENABLE_REQUEST_CODE = 101
     const val REQUEST_CAMERA_CODE = 102
-    const val READ_EXTERNAL_STORAGE_CODE = 103
 
     fun getLocationPermissionRequest(context: Context) = PermissionRequest.Builder(context)
         .code(REQUEST_CODE_LOCATION_PERMISSION)
@@ -29,15 +28,14 @@ object PermissionUtil {
         .rationale(context.getString(R.string.permission_rational, "Camera"))
         .build()
 
-    fun isLocationEnabled(context: Context): Pair<Boolean, Boolean> {
-        val lm =
-            context.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
-        return Pair<Boolean, Boolean>(
-            lm.isProviderEnabled(LocationManager.GPS_PROVIDER),
-            lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        )
-    }
-
+//    fun isLocationEnabled(context: Context): Pair<Boolean, Boolean> {
+//        val lm =
+//            context.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
+//        return Pair<Boolean, Boolean>(
+//            lm.isProviderEnabled(LocationManager.GPS_PROVIDER),
+//            lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+//        )
+//    }
 
     fun hasLocationPermissions(context: Context): Boolean {
         return EasyPermissions.hasPermissions(

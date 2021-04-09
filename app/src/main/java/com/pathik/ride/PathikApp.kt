@@ -30,11 +30,8 @@ class PathikApp : Application() {
             return priority >= Log.ERROR
         }
 
-        //Log Exception to Crashlytics here
         override fun log(priority: Int, tag: String?, message: String, throwable: Throwable?) {
 
         }
     }
-
-
 }

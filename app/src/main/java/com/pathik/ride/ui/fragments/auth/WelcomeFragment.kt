@@ -17,13 +17,11 @@ class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
         val binding = FragmentWelcomeBinding.bind(view)
 
         binding.btnRegister.setOnClickListener {
-            Timber.i("Btn Register Call");
             val action = WelcomeFragmentDirections.actionWelcomeFragmentToRegisterFragment();
             view.findNavController().navigate(action)
         }
 
         binding.btnSignIn.setOnClickListener {
-            Timber.i("Btn Sign In Call")
             val action = WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment();
             view.findNavController().navigate(action)
         }
