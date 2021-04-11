@@ -53,7 +53,7 @@
             android:id="@+id/tvLoginTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:gravity="start"
             android:text="@string/let_s_sign_you_in"
             android:textAppearance="@style/TextAppearance.Pathik.Headline4"
