@@ -1,12 +1,9 @@
 package com.pathik.ride.ui.activities.profile
 
-import android.Manifest
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
@@ -18,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseException
 import com.pathik.ride.R
@@ -36,10 +32,10 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 
-enum class DialogType {
-    CAMERA_PERMISSION_RATIONALE,
-//    GALLERY_PERMISSION_RATIONALE
-}
+//enum class DialogType {
+//    CAMERA_PERMISSION_RATIONALE,
+////    GALLERY_PERMISSION_RATIONALE
+//}
 
 @AndroidEntryPoint
 class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
@@ -240,32 +236,33 @@ class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
     }
 
     private fun showImagePickerOptions() {
-        val builder = MaterialAlertDialogBuilder(this)
-        builder.setTitle(getString(R.string.lbl_set_profile_photo))
-        val options = arrayOf(
-            getString(R.string.lbl_take_camera_picture),
-            getString(R.string.lbl_choose_from_gallery)
-        )
-        builder.setItems(
-            options
-        ) { _: DialogInterface?, which: Int ->
-            when (which) {
-                0 -> {
-                    if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
-                        takePicture()
-                    } else {
-                        EasyPermissions.requestPermissions(
-                            this,
-                            PermissionUtil.getCameraPermissionRequest(this)
-                        )
-                    }
-                }
-                1 -> {
-                    pickImages.launch("image/*")
-                }
-            }
-        }
-        builder.show()
+        pickImages.launch("image/*")
+//        val builder = MaterialAlertDialogBuilder(this)
+//        builder.setTitle(getString(R.string.lbl_set_profile_photo))
+//        val options = arrayOf(
+//            getString(R.string.lbl_take_camera_picture),
+//            getString(R.string.lbl_choose_from_gallery)
+//        )
+//        builder.setItems(
+//            options
+//        ) { _: DialogInterface?, which: Int ->
+//            when (which) {
+//                0 -> {
+//                    if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
+//                        takePicture()
+//                    } else {
+//                        EasyPermissions.requestPermissions(
+//                            this,
+//                            PermissionUtil.getCameraPermissionRequest(this)
+//                        )
+//                    }
+//                }
+//                1 -> {
+//                    pickImages.launch("image/*")
+//                }
+//            }
+//        }
+//        builder.show()
     }
 
     override fun onRequestPermissionsResult(
@@ -278,18 +275,18 @@ class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        if (requestCode == PermissionUtil.REQUEST_CAMERA_CODE) {
-            takePicture()
-        }
+//        if (requestCode == PermissionUtil.REQUEST_CAMERA_CODE) {
+//            takePicture()
+//        }
 //        } else if (requestCode == PermissionUtil.READ_EXTERNAL_STORAGE_CODE) {
 //            pickImages.launch("image/*")
 //        }
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
-        if (requestCode == PermissionUtil.REQUEST_CAMERA_CODE) {
-            getDialog(DialogType.CAMERA_PERMISSION_RATIONALE)
-        }
+//        if (requestCode == PermissionUtil.REQUEST_CAMERA_CODE) {
+//            getDialog(DialogType.CAMERA_PERMISSION_RATIONALE)
+//        }
 //        else if (requestCode == PermissionUtil.READ_EXTERNAL_STORAGE_CODE) {
 //            getDialog(DialogType.GALLERY_PERMISSION_RATIONALE)
 //        }
@@ -354,34 +351,16 @@ class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
     }
 
 
-    private fun getDialog(dialogType: DialogType) {
-        val builder = MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.permission_required))
-            .setCancelable(true)
-        when (dialogType) {
-            DialogType.CAMERA_PERMISSION_RATIONALE -> {
-                builder.setMessage(
-                    getString(
-                        R.string.configure_permission_in_app_settings,
-                        "Camera"
-                    )
-                )
-                    .setPositiveButton(R.string.open_settings) { dialog, _ ->
-                        dialog.dismiss()
-                        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.fromParts("package", packageName, null)
-                        })
-                    }
-                    .setNegativeButton(R.string.cancel) { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
-            }
-//            DialogType.GALLERY_PERMISSION_RATIONALE -> {
+//    private fun getDialog(dialogType: DialogType) {
+//        val builder = MaterialAlertDialogBuilder(this)
+//            .setTitle(getString(R.string.permission_required))
+//            .setCancelable(true)
+//        when (dialogType) {
+//            DialogType.CAMERA_PERMISSION_RATIONALE -> {
 //                builder.setMessage(
 //                    getString(
 //                        R.string.configure_permission_in_app_settings,
-//                        "Storage"
+//                        "Camera"
 //                    )
 //                )
 //                    .setPositiveButton(R.string.open_settings) { dialog, _ ->
@@ -395,6 +374,24 @@ class ProfileActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
 //                    }
 //                    .show()
 //            }
-        }
-    }
+////            DialogType.GALLERY_PERMISSION_RATIONALE -> {
+////                builder.setMessage(
+////                    getString(
+////                        R.string.configure_permission_in_app_settings,
+////                        "Storage"
+////                    )
+////                )
+////                    .setPositiveButton(R.string.open_settings) { dialog, _ ->
+////                        dialog.dismiss()
+////                        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+////                            data = Uri.fromParts("package", packageName, null)
+////                        })
+////                    }
+////                    .setNegativeButton(R.string.cancel) { dialog, _ ->
+////                        dialog.dismiss()
+////                    }
+////                    .show()
+////            }
+//        }
+//    }
 }
