@@ -144,10 +144,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             contentBinding.content.setOnApplyWindowInsetsListener { view, windowInsets ->
-                view.updatePadding(
-                    bottom = windowInsets.getInsets(WindowInsets.Type.navigationBars()).bottom,
-                    top = windowInsets.getInsets(WindowInsets.Type.statusBars()).top,
-                )
+                try {
+                    if (WindowInsets.Type.navigationBars() != null) {
+                        view.updatePadding(
+                            bottom = windowInsets.getInsets(WindowInsets.Type.navigationBars()).bottom,
+                            top = windowInsets.getInsets(WindowInsets.Type.statusBars()).top,
+                        )
+                    }
+                } catch (exp: Exception){
+                    Timber.e(exp);
+                }
                 windowInsets
             }
         } else {
